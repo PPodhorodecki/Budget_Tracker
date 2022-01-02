@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from budgettracker_app.views import Main
+from budgettracker_app.views import Main, LogUser, RegisterUser
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', Main.as_view()),
+    path('main/', Main.as_view()),
+    path('login/', LogUser.as_view()),
+    path('register/', RegisterUser.as_view()),
 ]

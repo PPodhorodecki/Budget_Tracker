@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Rejestracja nowego użytkownika{% endblock %}
+{% block content1 %}
+<a href="/main">Strona główna</a>
+<form method="post" action="">
+    {% csrf_token %}
+    <p><label>Imię: </label>
+        <input type="text" name="first_name"></p>
+    <p><label>Nazwisko: </label>
+        <input type="text" name="last_name"></p>
+    <p><label>E-mail: </label>
+        <input type="email" name="email"></p>
+    <p><label>Login: </label>
+        <input type="text" name="login"></p>
+    <p><label>Hasło: </label>
+        <input type="password" name="password1"></p>
+    <p><label>Powtórz hasło: </label>
+        <input type="password" name="password2"></p>
+    <p><input type="submit" name="register_user" value="Utwórz użytkownika"></p>
+</form>
+{{ info }}
+{% endblock %}
