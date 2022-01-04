@@ -1,3 +1,4 @@
+from datetime import date
 from django.db import models
 
 
@@ -7,5 +8,5 @@ class User(models.Model):
     email = models.EmailField(max_length=64)
     first_name = models.CharField(max_length=32)
     last_name = models.CharField(max_length=32)
-    account_created = models.DateField()
-    last_log = models.DateTimeField(null=True, default=0)
+    account_created = models.DateField(default=date.today)
+    last_log = models.DateTimeField(null=True)

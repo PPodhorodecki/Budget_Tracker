@@ -1,3 +1,12 @@
 {% extends "base.html" %}
 {% block title %}Strona główna{% endblock %}
-{% if
+{% block content1 %}
+    <a href="/login">Zaloguj się</a>
+    <a href="/register">Zarejestruj się</a>
+    <a href="/logout">Wyloguj</a>
+{% endblock %}
+{% block content2 %}
+    {{ welcome_text }}
+    {{ user_success }}
+    {{ logout_user }}
+{% endblock %}

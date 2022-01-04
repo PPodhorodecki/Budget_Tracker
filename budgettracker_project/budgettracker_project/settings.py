@@ -76,8 +76,13 @@ WSGI_APPLICATION = 'budgettracker_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'budgettracker_db',
+        #'ENGINE': 'django.db.backends.sqlite3',
+        #'NAME': BASE_DIR / 'budgettracker_db',
+        'HOST': '127.0.0.1',
+        'NAME': 'budgettracker_db',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
     }
 }
 
