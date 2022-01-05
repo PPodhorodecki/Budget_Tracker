@@ -19,7 +19,7 @@ from budgettracker_app.views import Main, LogUser, LogoutUser, RegisterUser
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('main/', Main.as_view()),
+    path('', Main.as_view()),
     path('login/', LogUser.as_view()),
     path('logout/', LogoutUser.as_view()),
     path('register/', RegisterUser.as_view()),

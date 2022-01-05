@@ -1,13 +1,29 @@
 {% extends "base.html" %}
 {% block title %}Logowanie użytkownika{% endblock %}
 {% block content1 %}
-<a href="/main">Strona główna</a>
+<a href="/">Strona główna</a>
 <form method="post" action="">
     {% csrf_token %}
     <p><label>Login: </label>
-        <input type="text" name="login"></p>{{ user_not_exists }}
+        <input type="text" name="login" value={{login}}>
+        {% for element in log_empty %}
+            {% if element == 'login' %}
+                {{ log_empty_field }}
+            {% endif %}
+        {% endfor %}
+        {{ user_not_exists }}
+
+    </p>
     <p><label>Hasło: </label>
-        <input type="password" name="password"></p>{{ wrong_pass }}
+        <input type="password" name="password">
+        {% for element in log_empty %}
+            {% if element == 'password' %}
+                {{ log_empty_field }}
+            {% endif %}
+        {% endfor %}
+        {{ wrong_pass }}
+
+    </p>
     <p><input type="submit" name="log_user" value="Zaloguj"></p>
 </form>
 {% endblock %}

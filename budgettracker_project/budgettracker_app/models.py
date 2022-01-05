@@ -10,3 +10,7 @@ class User(models.Model):
     last_name = models.CharField(max_length=32)
     account_created = models.DateField(default=date.today)
     last_log = models.DateTimeField(null=True)
+
+
+class Session(models.Model):
+    session_name = models.IntegerField()

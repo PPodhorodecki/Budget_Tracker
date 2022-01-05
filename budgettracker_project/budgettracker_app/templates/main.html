@@ -1,9 +1,14 @@
 {% extends "base.html" %}
 {% block title %}Strona główna{% endblock %}
 {% block content1 %}
-    <a href="/login">Zaloguj się</a>
-    <a href="/register">Zarejestruj się</a>
-    <a href="/logout">Wyloguj</a>
+    <p>
+        {% if auth == 0 %}
+            <a href="/login">Zaloguj się</a>
+            <a href="/register">Zarejestruj się</a>
+        {% elif auth == 1 %}
+            <a href="/logout">Wyloguj</a>
+        {% endif %}
+    </p>
 {% endblock %}
 {% block content2 %}
     {{ welcome_text }}
