@@ -1,25 +1,26 @@
 from django.shortcuts import render
 from django.views import View
-from datetime import date, datetime
-from budgettracker_app.models import User, Session
+from budgettracker_app.models import User, Session, Expense
 
 
 class Main(View):
     def get(self, request):
+        session = request.session.get('logged_user')
+        session_check = Session.objects.filter(session_name=session)
         ctx_main = {}
-        session_check = Session.objects.all()
         if session_check.count() == 1:
             auth = 1
             ctx_main['auth'] = auth
-            #logoutuser = '<a href="/logout">Wyloguj</a>'
-            #ctx_main['logoutuser'] = logoutuser
+            expenses_cont = Expense.objects.filter(user__id=session, continuity=True)
+            expenses_uncont = Expense.objects.filter(user__id=session, continuity=False)
+            ctx_main['expenses_cont'] = expenses_cont
+            ctx_main['expenses_uncont'] = expenses_uncont
+            #for expense in expenses:
+                #if expense.user.id == session:
+                    #pass #dodać tylko pofiltrowane wydatki
         elif session_check.count() == 0:
             auth = 0
             ctx_main['auth'] = auth
-            #loguser = '<a href="/login">Zaloguj się</a>'
-            #reguser = '<a href="/register">Zarejestruj się</a>'
-            #ctx_main['loguser'] = loguser
-            #ctx_main['reguser'] = reguser
         return render(request, "main.html", context=ctx_main)
 
 
@@ -40,25 +41,23 @@ class LogUser(View):
             log_empty_field = "Pole nie może pozostać puste."
             log_errors['log_empty'] = log_empty
             log_errors['log_empty_field'] = log_empty_field
-        try:
-            user = User.objects.get(login=login)
-            if user.password != password:
-                wrong_pass = "Wpisane hasło jest niepoprawne !"
-                log_errors['wrong_pass'] = wrong_pass
-        except:
+        user = User.objects.filter(login=login)
+        if user.count() == 0:
             user_not_exists = f"Użytkownik {login} nie istnieje !"
             log_errors['user_not_exists'] = user_not_exists
-
+        elif user.count() == 1 and user[0].password != password:
+            wrong_pass = "Wpisane hasło jest niepoprawne !"
+            log_errors['wrong_pass'] = wrong_pass
         if len(log_errors) > 1:
             return render(request, 'login.html', context=log_errors)
-        if user.password == password:
-            request.session['logged_user'] = user.id
+        if user.count() == 1 and user[0].password == password:
+            request.session['logged_user'] = user[0].id
             session_open = Session()
-            session_open.session_name = user.id
+            session_open.session_name = user[0].id
             session_open.save()
-            welcome_text = f"Witaj {user.first_name} !"
-            #user.last_log = datetime.now()
-            #user.save()
+            welcome_text = f"Witaj {user[0].first_name} !"
+            #user[0].last_log = datetime.now()
+            #user[0].save()
             return render(request, "main.html", context={'welcome_text': welcome_text})
 
 

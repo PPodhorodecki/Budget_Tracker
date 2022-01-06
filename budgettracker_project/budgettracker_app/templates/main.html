@@ -1,17 +1,80 @@
 {% extends "base.html" %}
 {% block title %}Strona główna{% endblock %}
+
 {% block content1 %}
     <p>
         {% if auth == 0 %}
             <a href="/login">Zaloguj się</a>
             <a href="/register">Zarejestruj się</a>
         {% elif auth == 1 %}
+            <a href="/archive">Archiwum</a>
+            <a href="/userdata">Konto</a>
             <a href="/logout">Wyloguj</a>
         {% endif %}
     </p>
+    <p>
+        {{ welcome_text }}
+        {{ user_success }}
+        {{ logout_user }}
+    </p>
 {% endblock %}
+
 {% block content2 %}
-    {{ welcome_text }}
-    {{ user_success }}
-    {{ logout_user }}
+    {% if auth == 1 %}
+        <table>
+            <tr>
+                <th>Nazwa</th>
+                <th>Koszt</th>
+                <th>Kategoria</th>
+                <th>Termin płatności</th>
+                <th>Status</th>
+            </tr>
+            {% for expense_cont in expenses_cont %}
+                <tr>
+                    <td>expense_cont.name</td>
+                    <td>expense_cont.value</td>
+                    <td>expense_cont.category</td>
+                    <td>expense_cont.deadline</td>
+                    <td>expense_cont.is_paid</td>
+                </tr>
+            {% endfor %}
+            {% for expense_uncont in expenses_uncont %}
+                <tr>
+                    <td>expense_uncont.name</td>
+                    <td>expense_uncont.value</td>
+                    <td>expense_uncont.category</td>
+                    <td>expense_uncont.deadline</td>
+                    <td>expense_uncont.is_paid</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endblock %}
+
+{% block content3 %}
+    <form method="POST" action="">
+        {% csrf_token %}
+        <p>
+            <label>Nazwa: </label>
+            <input type="text" name="exp_name">
+        </p>
+        <p>
+            <label>Kwota: </label>
+            <input type="number" name="exp_value"
+        </p>
+        <p>
+            <label>Termin płatności: </label>
+            <input type="date" name="exp_deadline"
+        </p>
+        <p>
+
+        </p>
+    </form>
+{% endblock %}
+
+{% block content4 %}
+    <form method="POST" action="">
+        {% csrf_token %}
+
+    </form>
 {% endblock %}
