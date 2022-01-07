@@ -1,5 +1,18 @@
 {% extends "base.html" %}
-{% block title %}Strona główna{% endblock %}
+
+{% block title %}
+    Strona główna
+{% endblock %}
+
+{% block style %}
+    .head {
+        border: 4px black;
+        font-weight: bold;
+    }
+    .body {
+        border: 2px black;
+    }
+{% endblock %}
 
 {% block content1 %}
     <p>
@@ -22,59 +35,89 @@
 {% block content2 %}
     {% if auth == 1 %}
         <table>
-            <tr>
-                <th>Nazwa</th>
-                <th>Koszt</th>
-                <th>Kategoria</th>
-                <th>Termin płatności</th>
-                <th>Status</th>
-            </tr>
-            {% for expense_cont in expenses_cont %}
+            <thead class="head">
                 <tr>
-                    <td>expense_cont.name</td>
-                    <td>expense_cont.value</td>
-                    <td>expense_cont.category</td>
-                    <td>expense_cont.deadline</td>
-                    <td>expense_cont.is_paid</td>
+                    <th colspan="6">Wydatki w Styczniu:</th>
                 </tr>
-            {% endfor %}
-            {% for expense_uncont in expenses_uncont %}
                 <tr>
-                    <td>expense_uncont.name</td>
-                    <td>expense_uncont.value</td>
-                    <td>expense_uncont.category</td>
-                    <td>expense_uncont.deadline</td>
-                    <td>expense_uncont.is_paid</td>
+                    <th>Nazwa</th>
+                    <th>Koszt</th>
+                    <th>Kategoria</th>
+                    <th>Termin płatności</th>
+                    <th>Status</th>
+                    <th>Akcje</th>
                 </tr>
-            {% endfor %}
+            </thead>
+            <tbody class="body">
+                {% for expense_cont in expenses_cont %}
+                    <tr>
+                        <td>{{ expense_cont.name }}</td>
+                        <td>{{ expense_cont.value }}</td>
+                        <td>{{ expense_cont.category }}</td>
+                        {% if expense_cont.deadline != None %}
+                            <td>{{ expense_cont.deadline|date:"d-m" }}</td>
+                        {% elif expense_cont.deadline == None %}
+                            <td>-</td>
+                        {% endif %}
+                        {% if expense_cont.is_paid == False %}
+                            <td>Nieopłacone</td>
+                        {% elif expense_cont.is_paid == True %}
+                            <td>Opłacone</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                {% for expense_uncont in expenses_uncont %}
+                    <tr>
+                        <td>{{ expense_uncont.name }}</td>
+                        <td>{{ expense_uncont.value }}</td>
+                        <td>{{ expense_uncont.category.name }}</td>
+                        {% if expense_uncont.deadline != None %}
+                            <td>{{ expense_uncont.deadline|date:"d-m" }}</td>
+                        {% elif expense_uncont.deadline == None %}
+                            <td>-</td>
+                        {% endif %}
+                        {% if expense_uncont.is_paid == False %}
+                            <td>Nieopłacone</td>
+                        {% elif expense_uncont.is_paid == True %}
+                            <td>Opłacone</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
         </table>
     {% endif %}
 {% endblock %}
 
 {% block content3 %}
-    <form method="POST" action="">
-        {% csrf_token %}
-        <p>
-            <label>Nazwa: </label>
-            <input type="text" name="exp_name">
-        </p>
-        <p>
-            <label>Kwota: </label>
-            <input type="number" name="exp_value"
-        </p>
-        <p>
-            <label>Termin płatności: </label>
-            <input type="date" name="exp_deadline"
-        </p>
-        <p>
+    {% if auth == 1 %}
+        <p>Dodaj nową płatność: </p>
+        <form method="POST" action="">
+            {% csrf_token %}
+            <p>
+                <label>Nazwa*: </label>
+                <input type="text" name="exp_name">
+            </p>
+            <p>
+                <label>Kwota*: </label>
+                <input type="number" name="exp_value"
+            </p>
+            <p>
+                <label>Termin płatności: </label>
+                <input type="date" name="exp_deadline"
+            </p>
+            <p>
 
-        </p>
-    </form>
+            </p>
+        </form>
+    {% endif %}
 {% endblock %}
 
 {% block content4 %}
-    <form method="POST" action="">
-        {% csrf_token %}
+    {% if auth == 1 %}
+        <p>Dodaj nową kategorię:</p>
+        <form method="POST" action="">
+            {% csrf_token %}
 
-    </form>
+        </form>
+    {% endif %}
 {% endblock %}

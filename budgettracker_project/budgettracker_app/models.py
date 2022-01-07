@@ -25,8 +25,6 @@ class Category(models.Model):
 class Expense(models.Model):
     name = models.CharField(max_length=32)
     value = models.DecimalField(max_digits=9, decimal_places=2)
-    #pay_month = models.DateField()
-    #pay_year = models.DateField()
     deadline = models.DateField(null=True)
     continuity = models.BooleanField(default=False)
     continuity_step = models.IntegerField(null=True) #Jak często płatność, jeśli damy, że cyklicznie. Dać defaultowo miesiąc.
