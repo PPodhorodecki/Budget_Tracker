@@ -1,25 +1,19 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
-from budgettracker_app.models import User, Session, Expense, Category
+from budgettracker_app.models import User, Expense, Category
+from django.contrib.auth import authenticate
 
 
 class Main(View):
     def get(self, request):
-        session = request.session.get('logged_user')
-        session_check = Session.objects.filter(session_name=session)
         ctx_main = {}
-        if session_check.count() == 1:
-            auth = 1
-            ctx_main['auth'] = auth
-            expenses_cont = Expense.objects.filter(user__id=session, continuity=True)
-            expenses_uncont = Expense.objects.filter(user__id=session, continuity=False)
-            categories = Category.objects.filter(user__id=session)
+        if request.user.is_authenticated:
+            expenses_cont = Expense.objects.filter(continuity=True)
+            expenses_uncont = Expense.objects.filter(continuity=False)
+            categories = Category.objects.all()
             ctx_main['expenses_cont'] = expenses_cont
             ctx_main['expenses_uncont'] = expenses_uncont
             ctx_main['categories'] = categories
-        elif session_check.count() == 0:
-            auth = 0
-            ctx_main['auth'] = auth
         return render(request, "main.html", context=ctx_main)
 
 
@@ -30,6 +24,7 @@ class LogUser(View):
     def post(self, request):
         login = request.POST.get("login")
         password = request.POST.get("password")
+        user = authenticate(username=login, password=password)
         log_errors = {'login': login}
         log_empty = []
         if login == "":
@@ -40,24 +35,15 @@ class LogUser(View):
             log_empty_field = "Pole nie może pozostać puste."
             log_errors['log_empty'] = log_empty
             log_errors['log_empty_field'] = log_empty_field
-        user = User.objects.filter(login=login)
-        if user.count() == 0:
-            user_not_exists = f"Użytkownik {login} nie istnieje !"
+        if not user:
+            user_not_exists = f"Użytkownik lub hasło jest niepoprawne !"
             log_errors['user_not_exists'] = user_not_exists
-        elif user.count() == 1 and user[0].password != password:
-            wrong_pass = "Wpisane hasło jest niepoprawne !"
-            log_errors['wrong_pass'] = wrong_pass
         if len(log_errors) > 1:
             return render(request, 'login.html', context=log_errors)
-        if user.count() == 1 and user[0].password == password:
-            request.session['logged_user'] = user[0].id
-            session_open = Session()
-            session_open.session_name = user[0].id
-            session_open.save()
-            welcome_text = f"Witaj {user[0].first_name} !"
             #user[0].last_log = datetime.now()
             #user[0].save()
-            return render(request, "main.html", context={'welcome_text': welcome_text})
+            #return render(request, "main.html", context={'welcome_text': welcome_text})
+        return redirect('main')
 
 
 
@@ -115,7 +101,7 @@ class RegisterUser(View):
         user.last_name = last_name
         user.email = email
         user.login = login
-        user.password = password1
+        user.set_password('password1')
         user.save()
         user_success = f"Użytkownik {login} został utworzony pomyślnie. Teraz możesz się zalogować do swojego konta."
         return render(request, "main.html", context={'user_success': user_success})

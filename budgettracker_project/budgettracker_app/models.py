@@ -12,10 +12,6 @@ class User(models.Model):
     last_log = models.DateTimeField(null=True)
 
 
-class Session(models.Model):
-    session_name = models.IntegerField()
-
-
 class Category(models.Model):
     name = models.CharField(max_length=32)
     description = models.TextField()

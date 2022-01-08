@@ -16,10 +16,10 @@
 
 {% block content1 %}
     <p>
-        {% if auth == 0 %}
+        {% if not request.user.is_authenticated %}
             <a href="/login">Zaloguj się</a>
             <a href="/register">Zarejestruj się</a>
-        {% elif auth == 1 %}
+        {% else %}
             <a href="/archive">Archiwum</a>
             <a href="/userdata">Konto</a>
             <a href="/logout">Wyloguj</a>
@@ -33,7 +33,7 @@
 {% endblock %}
 
 {% block content2 %}
-    {% if auth == 1 %}
+    {% if request.user.is_authenticated %}
         <table>
             <thead class="head">
                 <tr>
@@ -105,37 +105,41 @@
                 <label>Termin płatności: </label>
                 <input type="date" name="exp_deadline">
             </p>
-            <p>
-                <label>Ciągłość: </label>
-                <label>
-                    <input type="radio" name="continuity" value="yes">Tak
-                </label>
-                <label>
-                    <input type="radio" name="continuity" value="no" checked>Nie
-                </label>
-            </p>
-            <p>
-                <label>Częstotliwość płatności: </label>
-                <label>Dni: </label>
-                <input type="number" name="days_amount" value="" size=2>
-                <label>Tygodnie: </label>
-                <input type="number" name="weeks_amount" value="" size=2>
-                <label>Miesiące: </label>
-                <input type="number" name=months_amount" value="" size=2>
-                <label>Konkretny dzień miesiąca: </label>
-                <input type="number" name="month_day" value="" size=2 min=0 max=31>
-            </p>
-            <p>
-                <label>Ilość płatności: </label>
-                <label>
-                    <input type="radio" name="continuity_amount" value="continuity_amount_period">
-                    Cyklicznie
-                </label>
-                <label>
-                    <input type="radio" name="continuity_amount" value="continuity_amount_number" checked>
-                    <input type="number" name="continuity_number" size="3">
-                </label>
-            </p>
+            <div id="continuity">
+                <p>
+                    <label>Ciągłość: </label>
+                    <label>
+                        <input type="radio" name="continuity" value="yes">Tak
+                    </label>
+                    <label>
+                        <input type="radio" name="continuity" value="no" checked>Nie
+                    </label>
+                </p>
+            </div>
+            <div id="continuity_attributes">
+                <p>
+                    <label>Częstotliwość płatności: </label>
+                    <label>Dni: </label>
+                    <input type="number" name="days_amount" value="" size=2>
+                    <label>Tygodnie: </label>
+                    <input type="number" name="weeks_amount" value="" size=2>
+                    <label>Miesiące: </label>
+                    <input type="number" name=months_amount" value="" size=2>
+                    <label>Konkretny dzień miesiąca: </label>
+                    <input type="number" name="month_day" value="" size=2 min=0 max=31>
+                </p>
+                <p>
+                    <label>Ilość płatności: </label>
+                    <label>
+                        <input type="radio" name="continuity_amount" value="continuity_amount_period">
+                        Cyklicznie
+                    </label>
+                    <label>
+                        <input type="radio" name="continuity_amount" value="continuity_amount_number" checked>
+                        <input type="number" name="continuity_number" size="3">
+                    </label>
+                </p>
+            </div>
             <p>
                 <label>Status płatności: </label>
                 <label><input type="radio" name="is_paid" value="yes">Opłacone</label>
@@ -152,6 +156,7 @@
             <p>
                 <input type="submit" name="new_expense" value="Dodaj płatność">
             </p>
+            <p>Pola oznaczone gwiazką (*) są wymagane do uzupełnienia.</p>
         </form>
     {% endif %}
 {% endblock %}
@@ -161,7 +166,18 @@
         <p><b>Dodaj nową kategorię:</b></p>
         <form method="POST" action="">
             {% csrf_token %}
-
+            <p>
+                <label>Nazwa*: </label>
+                <input type="text" name="cat_name">
+            </p>
+            <p>
+                <label>Opis*: </label>
+                <input type="text" name="cat_description" size=20>
+            </p>
+            <p>
+                <input type="submit" name="new_category" value="Dodaj kategorię"
+            </p>
+            <p>Pola oznaczone gwiazką (*) są wymagane do uzupełnienia.</p>
         </form>
     {% endif %}
 {% endblock %}
