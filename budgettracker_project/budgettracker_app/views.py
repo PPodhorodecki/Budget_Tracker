@@ -101,5 +101,10 @@ class RegisterUser(View):
         user.username = username
         user.set_password(password1)
         user.save()
+        cat = Category()
+        cat.name = ""
+        cat.description = ""
+        cat.user = user
+        cat.save()
         user_success = f"Użytkownik {username} został utworzony pomyślnie. Teraz możesz się zalogować do swojego konta."
         return render(request, "main.html", context={'user_success': user_success})

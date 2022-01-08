@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block title %}Rejestracja nowego użytkownika{% endblock %}
 {% block content1 %}
-<a href="/">Strona główna</a>
+<button type="button" class="button4" onclick="window.location.href='/';">Strona główna</button>
 <form method="post" action="">
     {% csrf_token %}
-    <p><label>Imię: </label>
+    <p><label><b>Imię: </b></label>
         <input type="text" name="first_name" value={{first_name}}>
         {% for element in error_list %}
             {% if element == 'first_name' %}
@@ -13,7 +13,7 @@
         {% endfor %}
     </p>
 
-    <p><label>Nazwisko: </label>
+    <p><label><b>Nazwisko: </b></label>
         <input type="text" name="last_name" value={{last_name}}>
         {% for element in error_list %}
             {% if element == 'last_name' %}
@@ -22,7 +22,7 @@
         {% endfor %}
     </p>
 
-    <p><label>E-mail: </label>
+    <p><label><b>E-mail: </b></label>
         <input type="email" name="email" value={{email}}>
         {% for element in error_list %}
             {% if element == 'email' %}
@@ -31,7 +31,7 @@
         {% endfor %}
     </p>
 
-    <p><label>Login: </label>
+    <p><label><b>Login: </b></label>
         <input type="text" name="username" value={{username}}>
         {% for element in error_list %}
             {% if element == 'username' %}
@@ -41,7 +41,7 @@
         {{ user_exists }}
     </p>
 
-    <p><label>Hasło: </label>
+    <p><label><b>Hasło: </b></label>
         <input type="password" name="password1">
         {% for element in error_list %}
             {% if element == 'password1' %}
@@ -50,7 +50,7 @@
         {% endfor %}
     </p>
 
-    <p><label>Powtórz hasło: </label>
+    <p><label><b>Powtórz hasło: </b></label>
         <input type="password" name="password2">
         {% for element in error_list %}
             {% if element == 'password2' %}
@@ -60,6 +60,6 @@
         {{ diff_pass }}
     </p>
 
-    <p><input type="submit" value="Utwórz użytkownika"></p>
+    <p><input type="submit" value="Utwórz użytkownika" class="button4"></p>
 </form>
 {% endblock %}
