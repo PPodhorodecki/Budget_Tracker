@@ -90,7 +90,7 @@
 
 {% block content3 %}
     {% if auth == 1 %}
-        <p>Dodaj nową płatność: </p>
+        <p><b>Dodaj nową płatność: </b></p>
         <form method="POST" action="">
             {% csrf_token %}
             <p>
@@ -99,14 +99,58 @@
             </p>
             <p>
                 <label>Kwota*: </label>
-                <input type="number" name="exp_value"
+                <input type="number" name="exp_value" size=6>
             </p>
             <p>
                 <label>Termin płatności: </label>
-                <input type="date" name="exp_deadline"
+                <input type="date" name="exp_deadline">
             </p>
             <p>
-
+                <label>Ciągłość: </label>
+                <label>
+                    <input type="radio" name="continuity" value="yes">Tak
+                </label>
+                <label>
+                    <input type="radio" name="continuity" value="no" checked>Nie
+                </label>
+            </p>
+            <p>
+                <label>Częstotliwość płatności: </label>
+                <label>Dni: </label>
+                <input type="number" name="days_amount" value="" size=2>
+                <label>Tygodnie: </label>
+                <input type="number" name="weeks_amount" value="" size=2>
+                <label>Miesiące: </label>
+                <input type="number" name=months_amount" value="" size=2>
+                <label>Konkretny dzień miesiąca: </label>
+                <input type="number" name="month_day" value="" size=2 min=0 max=31>
+            </p>
+            <p>
+                <label>Ilość płatności: </label>
+                <label>
+                    <input type="radio" name="continuity_amount" value="continuity_amount_period">
+                    Cyklicznie
+                </label>
+                <label>
+                    <input type="radio" name="continuity_amount" value="continuity_amount_number" checked>
+                    <input type="number" name="continuity_number" size="3">
+                </label>
+            </p>
+            <p>
+                <label>Status płatności: </label>
+                <label><input type="radio" name="is_paid" value="yes">Opłacone</label>
+                <label><input type="radio" name="is_paid" value="no" checked>Nieopłacone</label>
+            </p>
+            <p>
+                <label>Wybierz kategorię: </label>
+                <select name="category">
+                    {% for category in categories %}
+                        <option value={{category.name}}>{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </p>
+            <p>
+                <input type="submit" name="new_expense" value="Dodaj płatność">
             </p>
         </form>
     {% endif %}
@@ -114,7 +158,7 @@
 
 {% block content4 %}
     {% if auth == 1 %}
-        <p>Dodaj nową kategorię:</p>
+        <p><b>Dodaj nową kategorię:</b></p>
         <form method="POST" action="">
             {% csrf_token %}
 

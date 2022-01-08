@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views import View
-from budgettracker_app.models import User, Session, Expense
+from budgettracker_app.models import User, Session, Expense, Category
 
 
 class Main(View):
@@ -13,11 +13,10 @@ class Main(View):
             ctx_main['auth'] = auth
             expenses_cont = Expense.objects.filter(user__id=session, continuity=True)
             expenses_uncont = Expense.objects.filter(user__id=session, continuity=False)
+            categories = Category.objects.filter(user__id=session)
             ctx_main['expenses_cont'] = expenses_cont
             ctx_main['expenses_uncont'] = expenses_uncont
-            #for expense in expenses:
-                #if expense.user.id == session:
-                    #pass #dodać tylko pofiltrowane wydatki
+            ctx_main['categories'] = categories
         elif session_check.count() == 0:
             auth = 0
             ctx_main['auth'] = auth
