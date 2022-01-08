@@ -6,13 +6,13 @@
     {% csrf_token %}
     <p>
         <label>Login: </label>
-        <input type="text" name="login" value={{login}}>
+        <input type="text" name="username" value={{username}}>
         {% for element in log_empty %}
-            {% if element == 'login' %}
+            {% if element == 'username' %}
                 {{ log_empty_field }}
             {% endif %}
         {% endfor %}
-        {{ user_not_exists }}
+
     </p>
     <p>
         <label>Hasło: </label>
@@ -25,7 +25,7 @@
         {{ wrong_pass }}
     </p>
     <p>
-        <input type="submit" name="log_user" value="Zaloguj">
+        <input type="submit" name="log_user" value="Zaloguj">{{ user_not_exists }}
     </p>
 </form>
 {% endblock %}

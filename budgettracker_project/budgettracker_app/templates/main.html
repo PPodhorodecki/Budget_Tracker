@@ -16,13 +16,13 @@
 
 {% block content1 %}
     <p>
-        {% if not request.user.is_authenticated %}
-            <a href="/login">Zaloguj się</a>
-            <a href="/register">Zarejestruj się</a>
-        {% else %}
+        {% if request.user.is_authenticated == True %}
             <a href="/archive">Archiwum</a>
             <a href="/userdata">Konto</a>
             <a href="/logout">Wyloguj</a>
+        {% else %}
+            <a href="/login">Zaloguj się</a>
+            <a href="/register">Zarejestruj się</a>
         {% endif %}
     </p>
     <p>
@@ -33,7 +33,7 @@
 {% endblock %}
 
 {% block content2 %}
-    {% if request.user.is_authenticated %}
+    {% if request.user.is_authenticated == True %}
         <table>
             <thead class="head">
                 <tr>
@@ -89,7 +89,7 @@
 {% endblock %}
 
 {% block content3 %}
-    {% if auth == 1 %}
+    {% if request.user.is_authenticated == True %}
         <p><b>Dodaj nową płatność: </b></p>
         <form method="POST" action="">
             {% csrf_token %}
@@ -162,7 +162,7 @@
 {% endblock %}
 
 {% block content4 %}
-    {% if auth == 1 %}
+    {% if request.user.is_authenticated == True %}
         <p><b>Dodaj nową kategorię:</b></p>
         <form method="POST" action="">
             {% csrf_token %}

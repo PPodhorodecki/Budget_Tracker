@@ -32,9 +32,9 @@
     </p>
 
     <p><label>Login: </label>
-        <input type="text" name="login" value={{login}}>
+        <input type="text" name="username" value={{username}}>
         {% for element in error_list %}
-            {% if element == 'login' %}
+            {% if element == 'username' %}
                 {{ empty_field }}
             {% endif %}
         {% endfor %}
