@@ -182,3 +182,26 @@
         </form>
     {% endif %}
 {% endblock %}
+
+{% block script %}
+  let formContinuity = document.getElementById('continuity_attributes')
+  let check1 = document.getElementById('continuity1')
+  let check2 = document.getElementById('continuity2')
+  formContinuity.style.display = 'none'
+  console.log(check1)
+  console.log(check2)
+  console.log(formContinuity)
+
+  check1.addEventListener('click', function(event){
+      if (check1.checked == true) {
+      formContinuity.style.display = 'block'
+      } else {
+      formContinuity.style.display = 'none'}
+  })
+  check2.addEventListener('click', function(event){
+      if (check2.checked == true) {
+      formContinuity.style.display = 'none'
+      } else {
+      formContinuity.style.display = 'block'}
+  })
+{% endblock %}
