@@ -8,9 +8,9 @@ class Main(View):
     def get(self, request):
         ctx_main = {}
         if request.user.is_authenticated:
-            expenses_cont = Expense.objects.filter(continuity=True)
-            expenses_uncont = Expense.objects.filter(continuity=False)
-            categories = Category.objects.all()
+            expenses_cont = Expense.objects.filter(user=request.user.id, continuity=True)
+            expenses_uncont = Expense.objects.filter(user=request.user.id, continuity=False)
+            categories = Category.objects.filter(user=request.user.id).order_by('name')
             ctx_main['expenses_cont'] = expenses_cont
             ctx_main['expenses_uncont'] = expenses_uncont
             ctx_main['categories'] = categories

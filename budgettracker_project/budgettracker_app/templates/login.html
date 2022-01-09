@@ -6,28 +6,31 @@
 <button type="button" class="button4" onclick="window.location.href='/';">Strona główna</button>
 <form method="POST" action="">
     {% csrf_token %}
-    <p>
-        <label><b>Login: </b></label>
-        <input type="text" name="username" value={{username}}>
-        {% for element in log_empty %}
-            {% if element == 'username' %}
-                {{ log_empty_field }}
-            {% endif %}
-        {% endfor %}
+    <fieldset>
+        <legend><b>Formularz logowania</b></legend>
+        <p>
+            <label><b>Login: </b></label>
+            <input type="text" name="username" value={{username}}>
+            {% for element in log_empty %}
+                {% if element == 'username' %}
+                    {{ log_empty_field }}
+                {% endif %}
+            {% endfor %}
 
-    </p>
-    <p>
-        <label><b>Hasło: </b></label>
-        <input type="password" name="password">
-        {% for element in log_empty %}
-            {% if element == 'password' %}
-                {{ log_empty_field }}
-            {% endif %}
-        {% endfor %}
-        {{ wrong_pass }}
-    </p>
-    <p>
-        <input type="submit" name="log_user" value="Zaloguj" class="button4">{{ user_not_exists }}
-    </p>
+        </p>
+        <p>
+            <label><b>Hasło: </b></label>
+            <input type="password" name="password">
+            {% for element in log_empty %}
+                {% if element == 'password' %}
+                    {{ log_empty_field }}
+                {% endif %}
+            {% endfor %}
+            {{ wrong_pass }}
+        </p>
+        <p>
+            <input type="submit" name="log_user" value="Zaloguj się" class="button4">{{ user_not_exists }}
+        </p>
+    </fieldset>
 </form>
 {% endblock %}

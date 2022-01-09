@@ -4,62 +4,64 @@
 <button type="button" class="button4" onclick="window.location.href='/';">Strona główna</button>
 <form method="post" action="">
     {% csrf_token %}
-    <p><label><b>Imię: </b></label>
-        <input type="text" name="first_name" value={{first_name}}>
-        {% for element in error_list %}
-            {% if element == 'first_name' %}
-                {{ empty_field }}
-            {% endif %}
-        {% endfor %}
-    </p>
+    <fieldset>
+        <legend><b>Formularz rejestracji</b></legend>
+        <p><label><b>Imię: </b></label>
+            <input type="text" name="first_name" value={{first_name}}>
+            {% for element in error_list %}
+                {% if element == 'first_name' %}
+                    {{ empty_field }}
+                {% endif %}
+            {% endfor %}
+        </p>
 
-    <p><label><b>Nazwisko: </b></label>
-        <input type="text" name="last_name" value={{last_name}}>
-        {% for element in error_list %}
-            {% if element == 'last_name' %}
-                {{ empty_field }}
-            {% endif %}
-        {% endfor %}
-    </p>
+        <p><label><b>Nazwisko: </b></label>
+            <input type="text" name="last_name" value={{last_name}}>
+            {% for element in error_list %}
+                {% if element == 'last_name' %}
+                    {{ empty_field }}
+                {% endif %}
+            {% endfor %}
+        </p>
 
-    <p><label><b>E-mail: </b></label>
-        <input type="email" name="email" value={{email}}>
-        {% for element in error_list %}
-            {% if element == 'email' %}
-                {{ empty_field }}
-            {% endif %}
-        {% endfor %}
-    </p>
+        <p><label><b>E-mail: </b></label>
+            <input type="email" name="email" value={{email}}>
+            {% for element in error_list %}
+                {% if element == 'email' %}
+                    {{ empty_field }}
+                {% endif %}
+            {% endfor %}
+        </p>
 
-    <p><label><b>Login: </b></label>
-        <input type="text" name="username" value={{username}}>
-        {% for element in error_list %}
-            {% if element == 'username' %}
-                {{ empty_field }}
-            {% endif %}
-        {% endfor %}
-        {{ user_exists }}
-    </p>
+        <p><label><b>Login: </b></label>
+            <input type="text" name="username" value={{username}}>
+            {% for element in error_list %}
+                {% if element == 'username' %}
+                    {{ empty_field }}
+                {% endif %}
+            {% endfor %}
+            {{ user_exists }}
+        </p>
 
-    <p><label><b>Hasło: </b></label>
-        <input type="password" name="password1">
-        {% for element in error_list %}
-            {% if element == 'password1' %}
-                {{ empty_field }}
-            {% endif %}
-        {% endfor %}
-    </p>
+        <p><label><b>Hasło: </b></label>
+            <input type="password" name="password1">
+            {% for element in error_list %}
+                {% if element == 'password1' %}
+                    {{ empty_field }}
+                {% endif %}
+            {% endfor %}
+        </p>
 
-    <p><label><b>Powtórz hasło: </b></label>
-        <input type="password" name="password2">
-        {% for element in error_list %}
-            {% if element == 'password2' %}
-                {{ empty_field }}
-            {% endif %}
-        {% endfor %}
-        {{ diff_pass }}
-    </p>
-
-    <p><input type="submit" value="Utwórz użytkownika" class="button4"></p>
+        <p><label><b>Powtórz hasło: </b></label>
+            <input type="password" name="password2">
+            {% for element in error_list %}
+                {% if element == 'password2' %}
+                    {{ empty_field }}
+                {% endif %}
+            {% endfor %}
+            {{ diff_pass }}
+        </p>
+        <p><input type="submit" value="Utwórz użytkownika" class="button4"></p>
+    </fieldset>
 </form>
 {% endblock %}

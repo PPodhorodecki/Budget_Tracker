@@ -29,21 +29,22 @@
         <table>
             <thead>
                 <tr>
-                    <th colspan="6">Płatności w Styczniu:</th>
+                    <th colspan="7">Płatności w Styczniu:</th>
                 </tr>
                 <tr>
-                    <th>Nazwa</th>
-                    <th>Koszt</th>
-                    <th>Kategoria</th>
-                    <th>Termin płatności</th>
-                    <th>Status</th>
-                    <th>Akcje</th>
+                    <th width="20%">Nazwa</th>
+                    <th width="6%">Koszt</th>
+                    <th width="10%">Kategoria</th>
+                    <th width="7%">Termin płatności</th>
+                    <th width="10%">Status</th>
+                    <th width="27">Uwagi</th>
+                    <th width="20%">Akcje</th>
                 </tr>
             </thead>
             <tbody>
                 {% for expense_cont in expenses_cont %}
                     <tr>
-                        <td>{{ expense_cont.name }}</td>
+                        <td class="name">{{ expense_cont.name }}</td>
                         <td>{{ expense_cont.value }}</td>
                         <td>{{ expense_cont.category }}</td>
                         {% if expense_cont.deadline != None %}
@@ -56,11 +57,13 @@
                         {% elif expense_cont.is_paid == True %}
                             <td>Opłacone</td>
                         {% endif %}
+                        <td>-</td>
+                        <td>'akcje'</td>
                     </tr>
                 {% endfor %}
                 {% for expense_uncont in expenses_uncont %}
                     <tr>
-                        <td>{{ expense_uncont.name }}</td>
+                        <td class="name">{{ expense_uncont.name }}</td>
                         <td>{{ expense_uncont.value }}</td>
                         <td>{{ expense_uncont.category.name }}</td>
                         {% if expense_uncont.deadline != None %}
@@ -73,6 +76,8 @@
                         {% elif expense_uncont.is_paid == True %}
                             <td>Opłacone</td>
                         {% endif %}
+                        <td>-</td>
+                        <td>'akcje'</td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -84,7 +89,7 @@
     {% if request.user.is_authenticated == True %}
         <form method="POST" action="">
             {% csrf_token %}
-            <fieldset>
+            <fieldset style="height: 420px;">
                 <legend><b>Dodaj nową płatność</b></legend>
                 <p>
                     <label><b>Nazwa*: </b></label>
@@ -98,14 +103,14 @@
                     <label><b>Termin płatności: </b></label>
                     <input type="date" name="exp_deadline">
                 </p>
-                <div id="continuity">
+                <div>
                     <p>
                         <label><b>Ciągłość: </b></label>
                         <label>
-                            <input type="radio" name="continuity" value="yes">Tak
+                            <input type="radio" name="continuity" value="yes" id="continuity1">Tak
                         </label>
                         <label>
-                            <input type="radio" name="continuity" value="no" checked>Nie
+                            <input type="radio" name="continuity" value="no" id="continuity2" checked>Nie
                         </label>
                     </p>
                 </div>
@@ -139,7 +144,7 @@
                     <label><input type="radio" name="is_paid" value="no" checked>Nieopłacone</label>
                 </p>
                 <p>
-                    <label><b>Wybierz kategorię: </b></label>
+                    <label><b>Wybierz kategorię*: </b></label>
                     <select name="category">
                         {% for category in categories %}
                             <option value={{category.name}}>{{ category.name }}</option>
@@ -159,7 +164,7 @@
     {% if request.user.is_authenticated == True %}
         <form method="POST" action="">
             {% csrf_token %}
-            <fieldset>
+            <fieldset style="height: 420px;">
                 <legend><b>Dodaj nową kategorię</b></legend>
                 <p>
                     <label><b>Nazwa*: </b></label>

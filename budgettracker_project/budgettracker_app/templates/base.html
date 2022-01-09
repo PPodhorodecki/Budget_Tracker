@@ -7,78 +7,82 @@
   </title>
   <style>
     body {
-    background: linear-gradient(to left, dodgerblue, mediumblue);
-    color: darkgray;
+    background: linear-gradient(90deg, #00c6ff 0%, #0072ff 100%);
+    color: white;
     }
 
     table {
-        width: 70%;
+        width: 90%;
         border-collapse: collapse;
         background: transparent;
         border-radius: 10px;
-        border: 4px solid darkgray;
-        color: darkgray;
+        border: 4px solid white;
+        color: white;
     }
     table th {
         text-align: center;
         background: transparent;
         border-radius: 10px;
-        border: 4px solid darkgray;
-        color: darkgray;
+        border: 4px solid white;
+        color: white;
         font-weight: bold;
     }
     table td {
         text-align: center;
         background: transparent;
         border-radius: 10px;
-        border: 2px solid darkgray;
-        color: darkgray;
+        border: 2px solid white;
+        color: white;
         font-weight: normal;
     }
     fieldset {
         display: inline;
         margin-top: 20px;
-        border: 4px solid darkgray;
+        border: 4px solid white;
         border-radius: 20px;
+    }
+    .forms {
+        display: flex;
+        justify-content: flex-start;
     }
     .button1 {
         display: inline-block;
         padding: 10px 10px;
-        background: darkgray;
+        background: white;
         border-top-left-radius: 20px;
         border-bottom-left-radius: 20px;
-        border: 3px solid darkgray;
-        color: mediumblue;
+        border: 3px solid white;
+        color: #00c6ff;
         font-weight: bold;
         font-size: 20px;
     }
     .button2 {
         display: inline-block;
         padding: 10px 10px;
-        background: darkgray;
-        border: 3px solid darkgray;
-        color: mediumblue;
+        background: white;
+        border: 3px solid white;
+        color: #00c6ff;
         font-weight: bold;
         font-size: 20px;
     }
     .button3 {
         display: inline-block;
         padding: 10px 10px;
-        background: darkgray;
+        background: white;
         border-top-right-radius: 20px;
         border-bottom-right-radius: 20px;
-        border: 3px solid darkgray;
-        color: mediumblue;
+        border: 3px solid white;
+        color: #00c6ff;
         font-weight: bold;
         font-size: 20px;
     }
     .button4 {
         display: inline-block;
         padding: 10px 10px;
-        background: darkgray;
+        background: white;
         border-radius: 20px;
-        border: 3px solid darkgray;
-        color: mediumblue;
+        border: 3px solid white;
+        color: #00c6ff;
         font-weight: bold;
         font-size: 20px;
     }
@@ -96,22 +100,48 @@
     {% endblock %}
   </div>
 
-  <div id="content3">
-    {% block content3 %}
-    {% endblock %}
-  </div>
+  <div class="forms">
+    <div id="content3">
+      {% block content3 %}
+      {% endblock %}
+    </div>
 
-  <div id="content4">
-    {% block content4 %}
-    {% endblock %}
+    <div id="content4">
+      {% block content4 %}
+      {% endblock %}
+    </div>
   </div>
 
   <div id="content5">
     {% block content5 %}
     {% endblock %}
   </div>
+
 </body>
 
-<script src="JavaScript/app.js"></script>
+<!--<script src="JavaScript/app.js"></script>-->
+
+<script>
+  let formContinuity = document.getElementById('continuity_attributes')
+  let check1 = document.getElementById('continuity1')
+  let check2 = document.getElementById('continuity2')
+  formContinuity.style.display = 'none'
+  console.log(check1)
+  console.log(check2)
+  console.log(formContinuity)
+
+  check1.addEventListener('click', function(event){
+      if (check1.checked == true) {
+      formContinuity.style.display = 'block'
+      } else {
+      formContinuity.style.display = 'none'}
+  })
+  check2.addEventListener('click', function(event){
+      if (check2.checked == true) {
+      formContinuity.style.display = 'none'
+      } else {
+      formContinuity.style.display = 'block'}
+  })
+</script>
 
 </html>
