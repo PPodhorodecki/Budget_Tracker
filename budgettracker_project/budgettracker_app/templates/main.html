@@ -168,11 +168,21 @@
                 <legend><b>Dodaj nową kategorię</b></legend>
                 <p>
                     <label><b>Nazwa*: </b></label>
-                    <input type="text" name="cat_name">
+                    <input type="text" name="cat_name" value={{cat_name}}>
+                    {% for element in cat_empty %}
+                        {% if element == 'category_name' %}
+                            {{ cat_empty_field }}
+                        {% endif %}
+                    {% endfor %}
                 </p>
                 <p>
                     <label><b>Opis*: </b></label>
-                    <input type="text" name="cat_description" size=20>
+                    <input type="text" name="cat_description" size=20 value={{cat_description}}>
+                    {% for element in cat_empty %}
+                        {% if element == 'category_description' %}
+                            {{ cat_empty_field }}
+                        {% endif %}
+                    {% endfor %}
                 </p>
                 <p>
                     <input type="submit" name="new_category" value="Dodaj kategorię" class="button4">

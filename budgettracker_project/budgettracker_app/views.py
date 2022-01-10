@@ -16,6 +16,41 @@ class Main(View):
             ctx_main['categories'] = categories
         return render(request, "main.html", context=ctx_main)
 
+    def post(self, request):
+        if request.user.is_authenticated:
+            ctx_main = {}
+            expenses_cont = Expense.objects.filter(user=request.user.id, continuity=True)
+            expenses_uncont = Expense.objects.filter(user=request.user.id, continuity=False)
+            categories = Category.objects.filter(user=request.user.id).order_by('name')
+            ctx_main['expenses_cont'] = expenses_cont
+            ctx_main['expenses_uncont'] = expenses_uncont
+            ctx_main['categories'] = categories
+            if 'new_category' in request.POST:
+                cat_name = request.POST.get('cat_name')
+                cat_description = request.POST.get('cat_description')
+                cat_user = request.user
+
+                cat_empty = []
+                if cat_name == "":
+                    cat_empty.append('category_name')
+                if cat_description == "":
+                    cat_empty.append('category_description')
+                if len(cat_empty) > 0:
+                    cat_empty_field = "Pole nie może pozostać puste."
+                    ctx_main['cat_empty'] = cat_empty
+                    ctx_main['cat_empty_field'] = cat_empty_field
+                    ctx_main['cat_name'] = cat_name
+                    ctx_main['cat_description'] = cat_description
+                    return render(request, 'main.html', context=ctx_main)
+                new_category = Category()
+                new_category.name = cat_name
+                new_category.description = cat_description
+                new_category.user = cat_user
+                new_category.save()
+                ctx_main['cat_name'] = ""
+                ctx_main['cat_description'] = ""
+            return render(request, "main.html", context=ctx_main)
+
 
 class LogUser(View):
     def get(self, request):
