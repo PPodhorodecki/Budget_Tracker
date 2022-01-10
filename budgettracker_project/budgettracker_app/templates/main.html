@@ -44,7 +44,7 @@
             <tbody>
                 {% for expense_cont in expenses_cont %}
                     <tr>
-                        <td class="name">{{ expense_cont.name }}</td>
+                        <td>{{ expense_cont.name }}</td>
                         <td>{{ expense_cont.value }}</td>
                         <td>{{ expense_cont.category }}</td>
                         {% if expense_cont.deadline != None %}
@@ -58,12 +58,12 @@
                             <td>Opłacone</td>
                         {% endif %}
                         <td>-</td>
-                        <td><input type="submit" class="button5" name=f"paid{expense_cont.id}"></td>
+                        <td>'akcje'</td>
                     </tr>
                 {% endfor %}
                 {% for expense_uncont in expenses_uncont %}
                     <tr>
-                        <td class="name">{{ expense_uncont.name }}</td>
+                        <td>{{ expense_uncont.name }}</td>
                         <td>{{ expense_uncont.value }}</td>
                         <td>{{ expense_uncont.category.name }}</td>
                         {% if expense_uncont.deadline != None %}
@@ -77,7 +77,7 @@
                             <td>Opłacone</td>
                         {% endif %}
                         <td>-</td>
-                        <td><input type="submit" class="button5" name="paid{{expense_uncont.id}}" value="Zapłać"></td>
+                        <td><button type="button" class="button5" name="paid" value={{expense_uncont.id}}>Zapłać</button></td>
                     </tr>
                 {% endfor %}
             </tbody>

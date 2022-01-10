@@ -54,8 +54,12 @@ class Main(View):
                 new_category.save()
                 ctx_main['cat_name'] = ""
                 ctx_main['cat_description'] = ""
+            if 'paid' in request.POST:
+                exp_id = request.POST['paid'] # Poprawić bo nie daje wyniku
+                expense = Expense.objects.get(id=exp_id)
+                expense.is_paid = True
+                expense.save()
             return render(request, "main.html", context=ctx_main)
-
 
 class LogUser(View):
     def get(self, request):
