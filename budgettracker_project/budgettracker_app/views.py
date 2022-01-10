@@ -29,12 +29,17 @@ class Main(View):
                 cat_name = request.POST.get('cat_name')
                 cat_description = request.POST.get('cat_description')
                 cat_user = request.user
-
                 cat_empty = []
                 if cat_name == "":
                     cat_empty.append('category_name')
                 if cat_description == "":
                     cat_empty.append('category_description')
+                try:
+                    if Category.objects.filter(name=cat_name).count() >= 1:
+                        cat_exists = f"Kategoria {cat_name} już istnieje. Podaj inną kategorię. "
+                        ctx_main['cat_exists'] = cat_exists
+                except:
+                    pass
                 if len(cat_empty) > 0:
                     cat_empty_field = "Pole nie może pozostać puste."
                     ctx_main['cat_empty'] = cat_empty
