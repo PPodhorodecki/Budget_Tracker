@@ -15,17 +15,56 @@
 
 {% block content2 %}
     {% if request.user.is_authenticated == True %}
-    <fieldset>
-        <legend><b>Opcje płatności</b></legend>
-            <form method="post" action="">
-                {% csrf_token %}
-                <input type="hidden" name="exp_id" value="{{expense.id}}">
-                <input type="submit" name="paid" value="Opłać" class="button1">
-                <input type="submit" name="delete" value="Usuń płatność" class="button3">
-            </form>
-
-
-
-    </fieldset>
+    <div class="details">
+        <fieldset>
+            <legend><b>Opcje płatności</b></legend>
+                <form method="post" action="">
+                    {% csrf_token %}
+                    <input type="hidden" name="exp_id" value="{{expense.id}}">
+                    <input type="submit" name="paid" value="Opłać" class="button1">
+                    <input type="submit" name="delete" value="Usuń płatność" class="button3">
+                </form>
+        </fieldset>
+        <fieldset>
+            <legend><b>Zmiana kategorii</b></legend>
+                <form method="post" action="">
+                    {% csrf_token %}
+                    <input type="submit" name="change_cat" value="Zmień kategorię" class="button4">
+                    <label><b>Aktualna kategoria: "{{ expense.category.name }}"</b></label>
+                    <select name="category" class="category">
+                        {% for category in categories %}
+                            <option value="{{category.name}}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+        </fieldset>
+        <fieldset>
+            <legend><b>Dodaj uwagi</b></legend>
+                <form method="post" action="">
+                    {% csrf_token %}
+                    <input type="submit" name="add_note" class="button4" value="Dodaj uwagi">
+                    <input type="text" name="note" size="160">
+                </form>
+        </fieldset>
+        <fieldset>
+            <legend><b>Historia uwag</b></legend>
+                <table>
+                    <thead>
+                        <tr>
+                            <th width="20%">Data dodania</th>
+                            <th width="80%">Treść uwagi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for note in notes %}
+                            <tr>
+                                <td>{{ note.mod_date|date:"%d-%m-%Y %H:%M " }}</td>
+                                <td>{{ note.text }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+        </fieldset>
+    </div>
     {% endif %}
 {% endblock %}

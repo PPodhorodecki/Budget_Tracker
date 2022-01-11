@@ -42,7 +42,7 @@
                         <td>{{ expense_cont.value }}</td>
                         <td>{{ expense_cont.category }}</td>
                         {% if expense_cont.deadline != None %}
-                            <td>{{ expense_cont.deadline|date:"d-m" }}</td>
+                            <td>{{ expense_cont.deadline|date:"%d-%m" }}</td>
                         {% elif expense_cont.deadline == None %}
                             <td>-</td>
                         {% endif %}
@@ -78,6 +78,41 @@
 {% endblock %}
 
 {% block content3 %}
+    {% if request.user.is_authenticated == True %}
+        <form method="POST" action="">
+            {% csrf_token %}
+            <fieldset style="height: 420px;">
+                <legend><b>Dodaj nową kategorię</b></legend>
+                    <p>
+                        <label><b>Nazwa*: </b></label>
+                        <input type="text" name="cat_name" value={{cat_name}}>
+                        {% for element in cat_empty %}
+                            {% if element == 'category_name' %}
+                                {{ cat_empty_field }}
+                            {% endif %}
+                        {% endfor %}
+                        {{ cat_exists }}
+                    </p>
+                    <p>
+                        <label><b>Opis*: </b></label>
+                        <input type="text" name="cat_description" size=20 value={{cat_description}}>
+                        {% for element in cat_empty %}
+                            {% if element == 'category_description' %}
+                                {{ cat_empty_field }}
+                            {% endif %}
+                        {% endfor %}
+                    </p>
+
+                    <p>
+                        <input type="submit" name="new_category" value="Dodaj kategorię" class="button4">
+                    </p>
+                    <p><font size="2">Pola oznaczone gwiazką (*) są wymagane do uzupełnienia.</font></p>
+            </fieldset>
+        </form>
+    {% endif %}
+{% endblock %}
+
+{% block content4 %}
     {% if request.user.is_authenticated == True %}
         <form method="POST" action="">
             {% csrf_token %}
@@ -137,7 +172,7 @@
                 </p>
                 <p>
                     <label><b>Wybierz kategorię*: </b></label>
-                    <select name="category">
+                    <select name="category" class="category">
                         {% for category in categories %}
                             <option value={{category.name}}>{{ category.name }}</option>
                         {% endfor %}
@@ -147,40 +182,6 @@
                     <input type="submit" name="new_expense" value="Dodaj płatność" class="button4">
                 </p>
                 <p><font size=2>Pola oznaczone gwiazką (*) są wymagane do uzupełnienia.</font></p>
-            </fieldset>
-        </form>
-    {% endif %}
-{% endblock %}
-
-{% block content4 %}
-    {% if request.user.is_authenticated == True %}
-        <form method="POST" action="">
-            {% csrf_token %}
-            <fieldset style="height: 420px;">
-                <legend><b>Dodaj nową kategorię</b></legend>
-                <p>
-                    <label><b>Nazwa*: </b></label>
-                    <input type="text" name="cat_name" value={{cat_name}}>
-                    {% for element in cat_empty %}
-                        {% if element == 'category_name' %}
-                            {{ cat_empty_field }}
-                        {% endif %}
-                    {% endfor %}
-                    {{ cat_exists }}
-                </p>
-                <p>
-                    <label><b>Opis*: </b></label>
-                    <input type="text" name="cat_description" size=20 value={{cat_description}}>
-                    {% for element in cat_empty %}
-                        {% if element == 'category_description' %}
-                            {{ cat_empty_field }}
-                        {% endif %}
-                    {% endfor %}
-                </p>
-                <p>
-                    <input type="submit" name="new_category" value="Dodaj kategorię" class="button4">
-                </p>
-                <p><font size="2">Pola oznaczone gwiazką (*) są wymagane do uzupełnienia.</font></p>
             </fieldset>
         </form>
     {% endif %}

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from budgettracker_app.models import User, Expense, Category
+from budgettracker_app.models import User, Expense, Category, Note
 from django.contrib.auth import authenticate, login, logout
 
 
@@ -140,8 +140,8 @@ class RegisterUser(View):
         user.set_password(password1)
         user.save()
         cat = Category()
-        cat.name = ""
-        cat.description = ""
+        cat.name = "Ogólne"
+        cat.description = "Ogólne wydatki"
         cat.user = user
         cat.save()
         user_success = f"Użytkownik {username} został utworzony pomyślnie. Teraz możesz się zalogować do swojego konta."
@@ -151,7 +151,9 @@ class RegisterUser(View):
 class Details(View):
     def get(self, request, expid):
         expense = Expense.objects.get(id=expid)
-        return render(request, 'details.html', context={'expense': expense})
+        categories = Category.objects.filter(user=request.user.id).exclude(name=expense.category.name).order_by('name')
+        notes = Note.objects.filter(expense=Expense.objects.get(id=expid)).order_by('mod_date')
+        return render(request, 'details.html', context={'expense': expense, 'categories': categories, 'notes': notes})
 
     def post(self, request, expid):
         if 'paid' in request.POST:
@@ -162,4 +164,9 @@ class Details(View):
         if 'delete' in request.POST:
             expense = Expense.objects.get(id=expid)
             expense.delete()
+            return redirect('main')
+        if 'change_cat' in request.POST:
+            expense = Expense.objects.get(id=expid)
+            expense.category = Category.objects.get(name=request.POST.get('category'))
+            expense.save()
             return redirect('main')
