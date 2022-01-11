@@ -54,12 +54,8 @@ class Main(View):
                 new_category.save()
                 ctx_main['cat_name'] = ""
                 ctx_main['cat_description'] = ""
-            if 'paid' in request.POST:
-                exp_id = request.POST['paid'] # Poprawić bo nie daje wyniku
-                expense = Expense.objects.get(id=exp_id)
-                expense.is_paid = True
-                expense.save()
             return render(request, "main.html", context=ctx_main)
+
 
 class LogUser(View):
     def get(self, request):
@@ -93,8 +89,6 @@ class LogUser(View):
 class LogoutUser(View):
     def get(self, request):
         logout(request)
-        #logout_user = "Użytkownik został bezpiecznie wylogowany"
-        #return render(request, 'main.html', context={'logout_user': logout_user})
         return redirect('main')
 
 
@@ -152,3 +146,20 @@ class RegisterUser(View):
         cat.save()
         user_success = f"Użytkownik {username} został utworzony pomyślnie. Teraz możesz się zalogować do swojego konta."
         return render(request, "main.html", context={'user_success': user_success})
+
+
+class Details(View):
+    def get(self, request, expid):
+        expense = Expense.objects.get(id=expid)
+        return render(request, 'details.html', context={'expense': expense})
+
+    def post(self, request, expid):
+        if 'paid' in request.POST:
+            expense = Expense.objects.get(id=expid)
+            expense.is_paid = True
+            expense.save()
+            return redirect('main')
+        if 'delete' in request.POST:
+            expense = Expense.objects.get(id=expid)
+            expense.delete()
+            return redirect('main')

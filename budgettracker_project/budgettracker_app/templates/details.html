@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Szczegóły wydatku
+{% endblock %}
+
+{% block content1 %}
+    {% if request.user.is_authenticated == True %}
+        <div class="forms">
+            <button type="button" class="button4" onclick="window.location.href='/';">Strona główna</button>
+            <p><b>Szczegóły wydatku: "{{ expense.name }}"</b></p>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block content2 %}
+    {% if request.user.is_authenticated == True %}
+    <fieldset>
+        <legend><b>Opcje płatności</b></legend>
+            <form method="post" action="">
+                {% csrf_token %}
+                <input type="hidden" name="exp_id" value="{{expense.id}}">
+                <input type="submit" name="paid" value="Opłać" class="button1">
+                <input type="submit" name="delete" value="Usuń płatność" class="button3">
+            </form>
+
+
+
+    </fieldset>
+    {% endif %}
+{% endblock %}

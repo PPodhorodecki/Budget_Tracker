@@ -5,9 +5,7 @@
 {% endblock %}
 
 
-
 {% block content1 %}
-    <p>
         {% if request.user.is_authenticated == True %}
             <button type="button" class="button1" onclick="window.location.href='/archive';">Archiwum</button>
             <button type="button" class="button2" onclick="window.location.href='/userdata';">Konto</button>
@@ -16,11 +14,8 @@
             <button type="button" class="button1" onclick="window.location.href='/login';">Zaloguj się</button>
             <button type="button" class="button3" onclick="window.location.href='/register';">Zarejestruj się</button>
         {% endif %}
-    </p>
     <p>
-        {{ welcome_text }}
         {{ user_success }}
-        {{ logout_user }}
     </p>
 {% endblock %}
 
@@ -29,16 +24,15 @@
         <table>
             <thead>
                 <tr>
-                    <th colspan="7">Płatności w Styczniu:</th>
+                    <th colspan="6">Płatności w Styczniu:</th>
                 </tr>
                 <tr>
-                    <th width="20%">Nazwa</th>
-                    <th width="6%">Koszt</th>
-                    <th width="10%">Kategoria</th>
+                    <th width="25%">Nazwa</th>
+                    <th width="9%">Koszt</th>
+                    <th width="13%">Kategoria</th>
                     <th width="7%">Termin płatności</th>
                     <th width="10%">Status</th>
-                    <th width="27">Uwagi</th>
-                    <th width="20%">Akcje</th>
+                    <th width="36">Uwagi</th>
                 </tr>
             </thead>
             <tbody>
@@ -58,12 +52,11 @@
                             <td>Opłacone</td>
                         {% endif %}
                         <td>-</td>
-                        <td>'akcje'</td>
                     </tr>
                 {% endfor %}
                 {% for expense_uncont in expenses_uncont %}
                     <tr>
-                        <td>{{ expense_uncont.name }}</td>
+                        <td><a href="/details/{{expense_uncont.id}}">{{ expense_uncont.name }}</a></td>
                         <td>{{ expense_uncont.value }}</td>
                         <td>{{ expense_uncont.category.name }}</td>
                         {% if expense_uncont.deadline != None %}
@@ -77,7 +70,6 @@
                             <td>Opłacone</td>
                         {% endif %}
                         <td>-</td>
-                        <td><button type="button" class="button5" name="paid" value={{expense_uncont.id}}>Zapłać</button></td>
                     </tr>
                 {% endfor %}
             </tbody>
