@@ -54,6 +54,19 @@ class Main(View):
                 new_category.save()
                 ctx_main['cat_name'] = ""
                 ctx_main['cat_description'] = ""
+            if 'del_category' in request.POST:
+                cat_name = request.POST.get('del_cat')
+                if cat_name == "Ogólne":
+                    cannot_delete = 'Kategorii "Ogólne" nie można usunąć.'
+                    ctx_main['cannot_delete'] = cannot_delete
+                    return render(request, 'main.html', context=ctx_main)
+                cat_overall = Category.objects.get(user=request.user.id, name='Ogólne')
+                category = Category.objects.get(user=request.user.id, name=cat_name)
+                expenses = Expense.objects.filter(user=request.user.id, category=category.id)
+                for expense in expenses:
+                    expense.category = cat_overall
+                    expense.save()
+                category.delete()
             return render(request, "main.html", context=ctx_main)
 
 
@@ -167,6 +180,6 @@ class Details(View):
             return redirect('main')
         if 'change_cat' in request.POST:
             expense = Expense.objects.get(id=expid)
-            expense.category = Category.objects.get(name=request.POST.get('category'))
+            expense.category = Category.objects.get(user=request.user.id, name=request.POST.get('category'))
             expense.save()
             return redirect('main')
