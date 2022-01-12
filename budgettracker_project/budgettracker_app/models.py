@@ -31,4 +31,4 @@ class Archive(models.Model):
     name = models.CharField(max_length=32)
     value = models.DecimalField(max_digits=9, decimal_places=2)
     paid_date = models.DateField()
-    expanse = models.ForeignKey(Expense, on_delete=models.CASCADE)
+    expense = models.ForeignKey(Expense, on_delete=models.CASCADE)

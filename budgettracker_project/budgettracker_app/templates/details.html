@@ -58,7 +58,7 @@
                     <tbody>
                         {% for note in notes %}
                             <tr>
-                                <td>{{ note.mod_date|date:"%d-%m-%Y %H:%M " }}</td>
+                                <td>{{ note.mod_date|date:"d-m-Y" }}</td>
                                 <td>{{ note.text }}</td>
                             </tr>
                         {% endfor %}

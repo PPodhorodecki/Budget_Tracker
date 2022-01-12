@@ -70,6 +70,16 @@
                             <td>Opłacone</td>
                         {% endif %}
                         <td>-</td>
+<!--                        {% for note in notes %}-->
+<!--                            {% if note.expense.id == expense_uncont.id %}-->
+<!--                                notetxt = note.text-->
+<!--                            {% endif %}-->
+<!--                        {% endfor %}-->
+<!--                        {% if notetxt is None %}-->
+<!--                            <td>-</td>-->
+<!--                        {% else %}-->
+<!--                            <td>{{notetxt}}</td>-->
+<!--                        {% endif %}-->
                     </tr>
                 {% endfor %}
             </tbody>

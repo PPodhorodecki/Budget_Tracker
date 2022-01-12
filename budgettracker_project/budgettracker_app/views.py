@@ -1,3 +1,4 @@
+import datetime
 from django.shortcuts import render, redirect
 from django.views import View
 from budgettracker_app.models import User, Expense, Category, Note
@@ -11,9 +12,11 @@ class Main(View):
             expenses_cont = Expense.objects.filter(user=request.user.id, continuity=True)
             expenses_uncont = Expense.objects.filter(user=request.user.id, continuity=False)
             categories = Category.objects.filter(user=request.user.id).order_by('name')
+            notes = Note.objects.all()
             ctx_main['expenses_cont'] = expenses_cont
             ctx_main['expenses_uncont'] = expenses_uncont
             ctx_main['categories'] = categories
+            ctx_main['notes'] = notes
         return render(request, "main.html", context=ctx_main)
 
     def post(self, request):
@@ -22,9 +25,11 @@ class Main(View):
             expenses_cont = Expense.objects.filter(user=request.user.id, continuity=True)
             expenses_uncont = Expense.objects.filter(user=request.user.id, continuity=False)
             categories = Category.objects.filter(user=request.user.id).order_by('name')
+            notes = Note.objects.all()
             ctx_main['expenses_cont'] = expenses_cont
             ctx_main['expenses_uncont'] = expenses_uncont
             ctx_main['categories'] = categories
+            ctx_main['notes'] = notes
             if 'new_category' in request.POST:
                 cat_name = request.POST.get('cat_name')
                 cat_description = request.POST.get('cat_description')
@@ -182,4 +187,13 @@ class Details(View):
             expense = Expense.objects.get(id=expid)
             expense.category = Category.objects.get(user=request.user.id, name=request.POST.get('category'))
             expense.save()
+            return redirect('main')
+        if 'add_note' in request.POST:
+            note_text = request.POST.get('note')
+            expense = Expense.objects.get(id=expid)
+            note = Note()
+            note.text = note_text
+            note.mod_date = datetime.datetime.now()
+            note.expense = expense
+            note.save()
             return redirect('main')
