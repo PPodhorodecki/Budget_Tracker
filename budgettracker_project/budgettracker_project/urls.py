@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from budgettracker_app.views import Main, LogUser, LogoutUser, RegisterUser, Details
+from budgettracker_app.views import Main, LogUser, LogoutUser, RegisterUser, Details, Account
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,4 +24,5 @@ urlpatterns = [
     path('logout/', LogoutUser.as_view()),
     path('register/', RegisterUser.as_view()),
     path('details/<int:expid>/', Details.as_view()),
+    path('account/', Account.as_view())
 ]

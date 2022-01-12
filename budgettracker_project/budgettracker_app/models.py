@@ -24,6 +24,7 @@ class Expense(models.Model):
 class Note(models.Model):
     text = models.TextField()
     mod_date = models.DateField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     expense = models.ForeignKey(Expense, on_delete=models.CASCADE)
 
 

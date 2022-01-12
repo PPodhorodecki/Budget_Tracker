@@ -7,8 +7,8 @@
 
 {% block content1 %}
         {% if request.user.is_authenticated == True %}
-<button type="button" class="button1" onclick="window.location.href='/archive';" xmlns="http://www.w3.org/1999/html">Archiwum</button>
-            <button type="button" class="button2" onclick="window.location.href='/userdata';">Konto</button>
+            <button type="button" class="button1" onclick="window.location.href='/archive';">Archiwum</button>
+            <button type="button" class="button2" onclick="window.location.href='/account';">Konto</button>
             <button type="button" class="button3" onclick="window.location.href='/logout';">Wyloguj</button>
         {% else %}
             <button type="button" class="button1" onclick="window.location.href='/login';">Zaloguj się</button>

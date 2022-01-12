@@ -197,3 +197,9 @@ class Details(View):
             note.expense = expense
             note.save()
             return redirect('main')
+
+
+class Account(View):
+    def get(self, request):
+        user = request.user
+        return render(request, 'account.html', context={'user': user})
