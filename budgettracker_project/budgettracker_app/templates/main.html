@@ -42,7 +42,7 @@
                         <td>{{ expense_cont.value }}</td>
                         <td>{{ expense_cont.category }}</td>
                         {% if expense_cont.deadline != None %}
-                            <td>{{ expense_cont.deadline|date:"%d-%m" }}</td>
+                            <td>{{ expense_cont.deadline|date:"d-m" }}</td>
                         {% elif expense_cont.deadline == None %}
                             <td>-</td>
                         {% endif %}

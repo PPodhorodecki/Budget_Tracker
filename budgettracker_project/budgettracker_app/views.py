@@ -170,7 +170,7 @@ class Details(View):
     def get(self, request, expid):
         expense = Expense.objects.get(id=expid)
         categories = Category.objects.filter(user=request.user.id).exclude(name=expense.category.name).order_by('name')
-        notes = Note.objects.filter(expense=Expense.objects.get(id=expid)).order_by('mod_date')
+        notes = Note.objects.filter(user=request.user, expense=Expense.objects.get(id=expid)).order_by('mod_date')
         return render(request, 'details.html', context={'expense': expense, 'categories': categories, 'notes': notes})
 
     def post(self, request, expid):
@@ -194,6 +194,7 @@ class Details(View):
             note = Note()
             note.text = note_text
             note.mod_date = datetime.datetime.now()
+            note.user = request.user
             note.expense = expense
             note.save()
             return redirect('main')
@@ -203,3 +204,44 @@ class Account(View):
     def get(self, request):
         user = request.user
         return render(request, 'account.html', context={'user': user})
+
+    def post(self, request):
+        user = request.user
+        if "change_data" in request.POST:
+            user = request.user
+            new_first_name = request.POST.get('first_name')
+            new_last_name = request.POST.get('last_name')
+            new_email = request.POST.get('email')
+            if new_first_name == "" or new_first_name == "-":
+                pass
+            else:
+                user.first_name = new_first_name
+            if new_last_name == "" or new_last_name == "-":
+                pass
+            else:
+                user.last_name = new_last_name
+            if new_email == "" or new_email == "-":
+                pass
+            else:
+                user.email = new_email
+            user.save()
+            return render(request, "account.html", context={'user': user})
+        if "change_pass" in request.POST:
+            new_pass1 = request.POST.get('password1')
+            new_pass2 = request.POST.get('password2')
+            if new_pass1 =="" and new_pass2 == "":
+                pass_info = 'Hasło nie uległo zmianie, ponieważ obydwa pola pozostały puste.'
+                return render(request, 'account.html', context={'user': user, 'pass_info': pass_info})
+            if new_pass1 != new_pass2:
+                pass_info = 'Obydwa wpisane hasła muszą być takie same.'
+                return render(request, 'account.html', context={'user': user, 'pass_info': pass_info})
+            user.set_password(new_pass1)
+            user.save()
+            pass_info = 'Hasło zostalo zmienione pomyślnie.'
+            return render(request, "account.html", context={'user': user, 'pass_info': pass_info})
+        if "delete_account" in request.POST:
+            user = User.objects.get(username=request.user.username)
+            logout(request)
+            user.delete()
+            user_success = 'Konto zostało pomyślnie usunięte.'
+            return render(request, 'main.html', context={'user_success': user_success})
