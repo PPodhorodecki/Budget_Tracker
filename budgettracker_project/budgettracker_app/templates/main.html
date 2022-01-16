@@ -24,7 +24,7 @@
         <table>
             <thead>
                 <tr>
-                    <th colspan="6">Płatności w Styczniu:</th>
+                    <th colspan="6">Spis nadchodzących płatności:</th>
                 </tr>
                 <tr>
                     <th width="25%">Nazwa</th>
@@ -36,42 +36,34 @@
                 </tr>
             </thead>
             <tbody>
-                {% for expense_cont in expenses_cont %}
+                {% for exp_dl in exp_with_dl %}
                     <tr>
-                        <td>{{ expense_cont.name }}</td>
-                        <td>{{ expense_cont.value }}</td>
-                        <td>{{ expense_cont.category }}</td>
-                        {% if expense_cont.deadline != None %}
-                            <td>{{ expense_cont.deadline|date:"d-m" }}</td>
-                        {% elif expense_cont.deadline == None %}
-                            <td>-</td>
-                        {% endif %}
-                        {% if expense_cont.is_paid == False %}
+                        <td><a href="/details/{{exp_dl.id}}">{{ exp_dl.name }}</a></td>
+                        <td>{{ exp_dl.value }}</td>
+                        <td>{{ exp_dl.category.name }}</td>
+                        <td>{{ exp_dl.deadline|date:"d-m" }}</td>
+                        {% if exp_dl.is_paid == False %}
                             <td>Nieopłacone</td>
-                        {% elif expense_cont.is_paid == True %}
+                        {% elif exp_dl.is_paid == True %}
                             <td>Opłacone</td>
                         {% endif %}
                         <td>-</td>
                     </tr>
                 {% endfor %}
-                {% for expense_uncont in expenses_uncont %}
+                {% for exp in exp_without_dl %}
                     <tr>
-                        <td><a href="/details/{{expense_uncont.id}}">{{ expense_uncont.name }}</a></td>
-                        <td>{{ expense_uncont.value }}</td>
-                        <td>{{ expense_uncont.category.name }}</td>
-                        {% if expense_uncont.deadline != None %}
-                            <td>{{ expense_uncont.deadline|date:"d-m" }}</td>
-                        {% elif expense_uncont.deadline == None %}
-                            <td>-</td>
-                        {% endif %}
-                        {% if expense_uncont.is_paid == False %}
+                        <td><a href="/details/{{exp.id}}">{{ exp.name }}</a></td>
+                        <td>{{ exp.value }}</td>
+                        <td>{{ exp.category.name }}</td>
+                        <td>-</td>
+                        {% if exp.is_paid == False %}
                             <td>Nieopłacone</td>
-                        {% elif expense_uncont.is_paid == True %}
+                        {% elif exp.is_paid == True %}
                             <td>Opłacone</td>
                         {% endif %}
                         <td>-</td>
 <!--                        {% for note in notes %}-->
-<!--                            {% if note.expense.id == expense_uncont.id %}-->
+<!--                            {% if note.expense.id == exp.id %}-->
 <!--                                notetxt = note.text-->
 <!--                            {% endif %}-->
 <!--                        {% endfor %}-->

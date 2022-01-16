@@ -22,6 +22,7 @@
                     {% csrf_token %}
                     <input type="hidden" name="exp_id" value="{{expense.id}}">
                     <input type="submit" name="paid" value="Opłać" class="button1">
+                    <input type="submit" name="archive" value="Archiwizuj" class="button2">
                     <input type="submit" name="delete" value="Usuń płatność" class="button3">
                 </form>
         </fieldset>

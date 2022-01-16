@@ -9,12 +9,12 @@ class Main(View):
     def get(self, request):
         ctx_main = {}
         if request.user.is_authenticated:
-            expenses_cont = Expense.objects.filter(user=request.user.id, continuity=True)
-            expenses_uncont = Expense.objects.filter(user=request.user.id, continuity=False)
+            exp_with_dl = Expense.objects.filter(user=request.user.id, deadline__isnull=False).order_by('deadline')
+            exp_without_dl = Expense.objects.filter(user=request.user.id, deadline__isnull=True).order_by('exp_create')
             categories = Category.objects.filter(user=request.user.id).order_by('name')
-            notes = Note.objects.all()
-            ctx_main['expenses_cont'] = expenses_cont
-            ctx_main['expenses_uncont'] = expenses_uncont
+            notes = Note.objects.filter(user=request.user.id)
+            ctx_main['exp_with_dl'] = exp_with_dl
+            ctx_main['exp_without_dl'] = exp_without_dl
             ctx_main['categories'] = categories
             ctx_main['notes'] = notes
         return render(request, "main.html", context=ctx_main)
@@ -22,12 +22,12 @@ class Main(View):
     def post(self, request):
         if request.user.is_authenticated:
             ctx_main = {}
-            expenses_cont = Expense.objects.filter(user=request.user.id, continuity=True)
-            expenses_uncont = Expense.objects.filter(user=request.user.id, continuity=False)
+            exp_with_dl = Expense.objects.filter(user=request.user.id, deadline__isnull=False).order_by('deadline')
+            exp_without_dl = Expense.objects.filter(user=request.user.id, deadline__isnull=True).order_by('exp_create')
             categories = Category.objects.filter(user=request.user.id).order_by('name')
-            notes = Note.objects.all()
-            ctx_main['expenses_cont'] = expenses_cont
-            ctx_main['expenses_uncont'] = expenses_uncont
+            notes = Note.objects.filter(user=request.user.id)
+            ctx_main['exp_with_dl'] = exp_with_dl
+            ctx_main['exp_without_dl'] = exp_without_dl
             ctx_main['categories'] = categories
             ctx_main['notes'] = notes
             if 'new_category' in request.POST:
@@ -57,8 +57,10 @@ class Main(View):
                 new_category.description = cat_description
                 new_category.user = cat_user
                 new_category.save()
+                main_info = f'Kategoria "{new_category.name}" została dodana.'
                 ctx_main['cat_name'] = ""
                 ctx_main['cat_description'] = ""
+                ctx_main['main_info'] = main_info
             if 'del_category' in request.POST:
                 cat_name = request.POST.get('del_cat')
                 if cat_name == "Ogólne":
@@ -71,7 +73,9 @@ class Main(View):
                 for expense in expenses:
                     expense.category = cat_overall
                     expense.save()
+                main_info = f'Kategoria "{cat_name}" została usunięta.'
                 category.delete()
+                ctx_main['main_info'] = main_info
             return render(request, "main.html", context=ctx_main)
 
 
