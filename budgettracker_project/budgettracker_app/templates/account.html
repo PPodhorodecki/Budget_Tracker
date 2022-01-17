@@ -5,69 +5,79 @@
 {% endblock %}
 
 {% block content1 %}
-    <div class="forms">
-        <button type="button" class="button4" onclick="window.location.href='/';">Strona główna</button>
-    </div>
+    {% if request.user.is_authenticated == True %}
+        <div class="forms">
+            <button type="button" class="button4" onclick="window.location.href='/';">Strona główna</button>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block content2 %}
-<p><b>Konto użytkownika: {{ user.username }}</b></p>
-<p><b>Imię: {{ user.first_name }}</b></p>
-<p><b>Nazwisko: {{ user.last_name }}</b></p>
-<p><b>E-mail: {{ user.email }}</b></p>
-<p><b>Data dołączenia do serwisu: {{ user.date_joined|date:"d-m-Y H:i" }}</b></p>
-<p><b>Data ostatniego logowania: {{ user.last_login|date:"d-m-Y H:i" }}</b></p>
+    {% if request.user.is_authenticated == True %}
+        <p><b>Konto użytkownika: {{ user.username }}</b></p>
+        <p><b>Imię: {{ user.first_name }}</b></p>
+        <p><b>Nazwisko: {{ user.last_name }}</b></p>
+        <p><b>E-mail: {{ user.email }}</b></p>
+        <p><b>Data dołączenia do serwisu: {{ user.date_joined|date:"d-m-Y H:i" }}</b></p>
+        <p><b>Data ostatniego logowania: {{ user.last_login|date:"d-m-Y H:i" }}</b></p>
+    {% endif %}
 {% endblock %}
 
 {% block content3 %}
-<form method="post" action="">
-    {% csrf_token %}
-        <fieldset style="height: 210px; width: 320px">
-            <legend><b>Edycja danych użytkownika</b></legend>
-            <p><label><b>Imię: </b></label>
-                <input type="text" name="first_name" value={{user.first_name}}>
-            </p>
+    {% if request.user.is_authenticated == True %}
+        <form method="post" action="">
+            {% csrf_token %}
+                <fieldset style="height: 210px; width: 320px">
+                    <legend><b>Edycja danych użytkownika</b></legend>
+                    <p><label><b>Imię: </b></label>
+                        <input type="text" name="first_name" value={{user.first_name}}>
+                    </p>
 
-            <p><label><b>Nazwisko: </b></label>
-                <input type="text" name="last_name" value={{user.last_name}}>
-            </p>
+                    <p><label><b>Nazwisko: </b></label>
+                        <input type="text" name="last_name" value={{user.last_name}}>
+                    </p>
 
-            <p><label><b>E-mail: </b></label>
-                <input type="email" name="email" value={{user.email}}>
-            </p>
-            <p><input type="submit" value="Zmień dane" name="change_data" class="button4"></p>
-        </fieldset>
-</form>
+                    <p><label><b>E-mail: </b></label>
+                        <input type="email" name="email" value={{user.email}}>
+                    </p>
+                    <p><input type="submit" value="Zmień dane" name="change_data" class="button4"></p>
+                </fieldset>
+        </form>
+    {% endif %}
 {% endblock %}
 
 {% block content4 %}
-    <form method="post" action="">
-        {% csrf_token %}
-            <fieldset style="height: 210px; width: 400px">
-                <legend><b>Zmiana hasła</b></legend>
-                <p>
-                    <label><b>Podaj nowe hasło: </b></label>
-                    <input type="password" name="password1">
-                </p>
-                <p>
-                    <label><b>Powtórz nowe hasło: </b></label>
-                    <input type="password" name="password2">
-                </p>
-                <p><input type="submit" value="Zmień hasło" name="change_pass" class="button4"></p>
-                <p>{{ pass_info }}</p>
-            </fieldset>
-    </form>
+    {% if request.user.is_authenticated == True %}
+        <form method="post" action="">
+            {% csrf_token %}
+                <fieldset style="height: 210px; width: 400px">
+                    <legend><b>Zmiana hasła</b></legend>
+                    <p>
+                        <label><b>Podaj nowe hasło: </b></label>
+                        <input type="password" name="password1">
+                    </p>
+                    <p>
+                        <label><b>Powtórz nowe hasło: </b></label>
+                        <input type="password" name="password2">
+                    </p>
+                    <p><input type="submit" value="Zmień hasło" name="change_pass" class="button4"></p>
+                    <p>{{ pass_info }}</p>
+                </fieldset>
+        </form>
+    {% endif %}
 {% endblock %}
 
 {% block content5 %}
-    <form method="post" action="">
-        {% csrf_token %}
-            <fieldset style="height: 210px; width: 320px">
-                <legend><b>Usuwanie konta</b></legend>
-                <p>
-                    <b>Jesteś pewny/a, że chcesz usunąć bieżące konto ? Dane zostaną utracone bezpowrotnie.</b>
-                </p>
-                <p><input type="submit" value="Usuń konto" name="delete_account" class="button4"></p>
-            </fieldset>
-    </form>
+    {% if request.user.is_authenticated == True %}
+        <form method="post" action="">
+            {% csrf_token %}
+                <fieldset style="height: 210px; width: 320px">
+                    <legend><b>Usuwanie konta</b></legend>
+                    <p>
+                        <b>Jesteś pewny/a, że chcesz usunąć bieżące konto ? Dane zostaną utracone bezpowrotnie.</b>
+                    </p>
+                    <p><input type="submit" value="Usuń konto" name="delete_account" class="button4"></p>
+                </fieldset>
+        </form>
+    {% endif %}
 {% endblock %}

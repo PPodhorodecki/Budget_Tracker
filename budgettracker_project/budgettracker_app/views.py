@@ -76,6 +76,20 @@ class Main(View):
                 main_info = f'Kategoria "{cat_name}" została usunięta.'
                 category.delete()
                 ctx_main['main_info'] = main_info
+            if 'new_expense' in request.POST:
+                expense_name = request.POST.get('exp_name')
+                expense_value = request.POST.get('exp_value')
+                expense_deadline = request.POST.get('exp_deadline')
+                expense_continuity = request.POST.get('continuity')
+                if expense_continuity == 'yes':
+                    expense_days = request.POST.get('days_amount')
+                    expense_weeks = request.POST.get('weeks_amount')
+                    expense_months = request.POST.get('months_amount')
+                    expense_day = request.POST.get('month_day')
+
+
+
+
             return render(request, "main.html", context=ctx_main)
 
 
