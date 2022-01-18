@@ -1,4 +1,5 @@
-import datetime
+from datetime import date
+from dateutil.relativedelta import relativedelta
 from django.shortcuts import render, redirect
 from django.views import View
 from budgettracker_app.models import User, Expense, Category, Note
@@ -79,15 +80,39 @@ class Main(View):
             if 'new_expense' in request.POST:
                 expense_name = request.POST.get('exp_name')
                 expense_value = request.POST.get('exp_value')
+                expense_category = request.POST.get('category')
+                if expense_name == "" or expense_value == "" or expense_category == "":
+                    expense_info = "Nie wszystkie wymagane pola zostały uzupełnione."
+                    ctx_main['expense_info'] = expense_info
+                    return render(request, 'main.html', context=ctx_main)
                 expense_deadline = request.POST.get('exp_deadline')
                 expense_continuity = request.POST.get('continuity')
+                expense_create = date.today()
+                ctx_main['expense_name'] = expense_name
+                ctx_main['expense_value'] = expense_value
+                ctx_main['expense_deadline'] = expense_deadline
                 if expense_continuity == 'yes':
                     expense_days = request.POST.get('days_amount')
                     expense_weeks = request.POST.get('weeks_amount')
                     expense_months = request.POST.get('months_amount')
-                    expense_day = request.POST.get('month_day')
-
-
+                    expense_amount = request.POST.get('continuity_amount')
+                    if expense_days != "" and expense_weeks == "" and expense_months == "":
+                        next_expense = expense_deadline + relativedelta(days=+expense_days)
+                        period = f'{expense_days}_days'
+                    elif expense_weeks != "" and expense_days == "" and expense_months == "":
+                        next_expense = expense_deadline + relativedelta(weeks=+expense_weeks)
+                        period = f'{expense_weeks}_weeks'
+                    elif expense_months != "" and expense_days == "" and expense_weeks == "":
+                        next_expense = expense_deadline + relativedelta(months=+expense_months)
+                        period = f'{expense_months}_months'
+                    else:
+                        expense_info = "Tylko jedno pole częstotliwości płatności może zostać uzupełnione. Reszta musi pozostać pusta."
+                        ctx_main['expense_info'] = expense_info
+                        return render(request, 'main.html', context=ctx_main)
+                    if expense_amount == 'continuity_amount_period':
+                        exp_amount = 1000
+                    else:
+                        exp_amount = request.POST.get('continuity_number')
 
 
             return render(request, "main.html", context=ctx_main)
