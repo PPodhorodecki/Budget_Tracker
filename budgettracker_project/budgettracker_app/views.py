@@ -151,7 +151,7 @@ class Main(View):
                 expense.value = expense_value
                 expense.create = date.today()
                 #expense.deadline = expense_deadline
-                if exp_continuity == True:
+                if expense_continuity == 'true':
                     expense.deadline = expense_deadline
                     expense.continuity = exp_continuity
                     expense.exp_amount = exp_amount
@@ -161,6 +161,14 @@ class Main(View):
                 expense.user = request.user
                 expense.category = Category.objects.get(name=expense_category)
                 expense.save()
+                ctx_main['expense_name'] = ""
+                ctx_main['expense_value'] = ""
+                ctx_main['expense_deadline'] = ""
+                ctx_main['expense_days'] = ""
+                ctx_main['expense_weeks'] = ""
+                ctx_main['expense_months'] = ""
+                ctx_main['expense_amount'] = ""
+
             return render(request, "main.html", context=ctx_main)
 
 

@@ -30,6 +30,10 @@
                     </form>
             </fieldset>
             <fieldset>
+                <legend><b>Szczegóły wydatku {{ expense.name }}</b></legend>
+
+            </fieldset>
+            <fieldset>
                 <legend><b>Zmiana kategorii</b></legend>
                     <form method="post" action="">
                         {% csrf_token %}
