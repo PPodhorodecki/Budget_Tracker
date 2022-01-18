@@ -132,10 +132,20 @@
                 <p>
                     <label><b>Nazwa*: </b></label>
                     <input type="text" name="exp_name" value={{expense_name}}>
+                        {% for element in exp_empty %}
+                            {% if element == 'expense_name' %}
+                                <font color="red">{{ exp_empty_field }}</font>
+                            {% endif %}
+                        {% endfor %}
                 </p>
                 <p>
                     <label><b>Kwota*: </b></label>
                     <input type="number" name="exp_value" value={{expense_value}} size=6>
+                        {% for element in exp_empty %}
+                            {% if element == 'expense_value' %}
+                                <font color="red">{{ exp_empty_field }}</font>
+                            {% endif %}
+                        {% endfor %}
                 </p>
                 <p>
                     <label><b>Termin płatności: </b></label>
@@ -145,10 +155,10 @@
                     <p>
                         <label><b>Cykliczność płatności: </b></label>
                         <label>
-                            <input type="radio" name="continuity" value=True id="continuity1">Tak
+                            <input type="radio" name="continuity" value="true" id="continuity1">Tak
                         </label>
                         <label>
-                            <input type="radio" name="continuity" value=False id="continuity2" checked>Nie
+                            <input type="radio" name="continuity" value="false" id="continuity2" checked>Nie
                         </label>
                     </p>
                 </div>
@@ -177,8 +187,8 @@
                 </div>
                 <p>
                     <label><b>Status płatności: </b></label>
-                    <label><input type="radio" name="is_paid" value=True>Opłacone</label>
-                    <label><input type="radio" name="is_paid" value=False checked>Nieopłacone</label>
+                    <label><input type="radio" name="is_paid" value="true">Opłacone</label>
+                    <label><input type="radio" name="is_paid" value="false" checked>Nieopłacone</label>
                 </p>
                 <p>
                     <label><b>Wybierz kategorię*: </b></label>
