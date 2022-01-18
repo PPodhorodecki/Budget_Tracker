@@ -14,7 +14,7 @@
             <button type="button" class="button1" onclick="window.location.href='/login';">Zaloguj się</button>
             <button type="button" class="button3" onclick="window.location.href='/register';">Zarejestruj się</button>
         {% endif %}
-    <p>
+    <p style="color:red">
         {{ user_success }}
     </p>
 {% endblock %}
@@ -62,16 +62,6 @@
                             <td>Opłacone</td>
                         {% endif %}
                         <td>-</td>
-<!--                        {% for note in notes %}-->
-<!--                            {% if note.expense.id == exp.id %}-->
-<!--                                notetxt = note.text-->
-<!--                            {% endif %}-->
-<!--                        {% endfor %}-->
-<!--                        {% if notetxt is None %}-->
-<!--                            <td>-</td>-->
-<!--                        {% else %}-->
-<!--                            <td>{{notetxt}}</td>-->
-<!--                        {% endif %}-->
                     </tr>
                 {% endfor %}
             </tbody>
@@ -91,17 +81,17 @@
                             <input type="text" name="cat_name" value={{cat_name}}>
                             {% for element in cat_empty %}
                                 {% if element == 'category_name' %}
-                                    {{ cat_empty_field }}
+                                    <font color="red">{{ cat_empty_field }}</font>
                                 {% endif %}
                             {% endfor %}
-                            {{ cat_exists }}
+                            <font color="red">{{ cat_exists }}</font>
                         </p>
                         <p>
                             <label><b>Opis*: </b></label>
                             <input type="text" name="cat_description" size=20 value={{cat_description}}>
                             {% for element in cat_empty %}
                                 {% if element == 'category_description' %}
-                                    {{ cat_empty_field }}
+                                    <font color="red">{{ cat_empty_field }}</font>
                                 {% endif %}
                             {% endfor %}
                         </p>
@@ -125,7 +115,7 @@
                             <input type="submit" name="del_category" value="Usuń kategorię" class="button4">
                         </p>
                         <p>
-                            {{ cannot_delete }}
+                            <font color="red">{{ cannot_delete }}</font>
                         </p>
                 </fieldset>
             </div>
@@ -153,12 +143,12 @@
                 </p>
                 <div>
                     <p>
-                        <label><b>Ciągłość: </b></label>
+                        <label><b>Cykliczność płatności: </b></label>
                         <label>
-                            <input type="radio" name="continuity" value="yes" id="continuity1">Tak
+                            <input type="radio" name="continuity" value=True id="continuity1">Tak
                         </label>
                         <label>
-                            <input type="radio" name="continuity" value="no" id="continuity2" checked>Nie
+                            <input type="radio" name="continuity" value=False id="continuity2" checked>Nie
                         </label>
                     </p>
                 </div>
@@ -166,28 +156,29 @@
                     <p>
                         <label><b>Częstotliwość płatności: </b></label>
                         <label>Dni: </label>
-                        <input type="number" name="days_amount" value="" size=2>
+                        <input type="number" name="days_amount" value={{expense_days}} size="3">
                         <label>Tygodnie: </label>
-                        <input type="number" name="weeks_amount" value="" size=2>
+                        <input type="number" name="weeks_amount" value={{expense_weeks}} size="3">
                         <label>Miesiące: </label>
-                        <input type="number" name=months_amount" value="" size=2>
+                        <input type="number" name="months_amount" value={{expense_months}} size="3">
                     </p>
                     <p>
                         <label><b>Ilość płatności: </b></label>
                         <label>
                             <input type="radio" name="continuity_amount" value="continuity_amount_period">
-                            Cyklicznie
+                            Bez określonej ilości
                         </label>
                         <label>
                             <input type="radio" name="continuity_amount" value="continuity_amount_number" checked>
-                            <input type="number" name="continuity_number" size="3">
+                            Z określoną ilością:
+                            <input type="number" name="continuity_number" value={{expense_amount}} size="3">
                         </label>
                     </p>
                 </div>
                 <p>
                     <label><b>Status płatności: </b></label>
-                    <label><input type="radio" name="is_paid" value="yes">Opłacone</label>
-                    <label><input type="radio" name="is_paid" value="no" checked>Nieopłacone</label>
+                    <label><input type="radio" name="is_paid" value=True>Opłacone</label>
+                    <label><input type="radio" name="is_paid" value=False checked>Nieopłacone</label>
                 </p>
                 <p>
                     <label><b>Wybierz kategorię*: </b></label>
@@ -199,6 +190,7 @@
                 </p>
                 <p>
                     <input type="submit" name="new_expense" value="Dodaj płatność" class="button4">
+                    <font color="red">{{ expense_info }}</font>
                 </p>
                 <p><font size=2>Pola oznaczone gwiazką (*) są wymagane do uzupełnienia.</font></p>
             </fieldset>

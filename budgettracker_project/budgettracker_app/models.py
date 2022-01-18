@@ -12,10 +12,10 @@ class Category(models.Model):
 class Expense(models.Model):
     name = models.CharField(max_length=32)
     value = models.DecimalField(max_digits=9, decimal_places=2)
+    create = models.DateField(null=True)
     deadline = models.DateField(null=True)
     continuity = models.BooleanField(default=False)
     exp_amount = models.IntegerField(null=True)
-    create = models.DateField(null=True)
     period_delta = models.CharField(max_length=64)
     next_exp = models.DateField(null=True)
     is_paid = models.BooleanField(default=False)

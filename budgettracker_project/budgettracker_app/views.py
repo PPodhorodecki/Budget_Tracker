@@ -11,7 +11,7 @@ class Main(View):
         ctx_main = {}
         if request.user.is_authenticated:
             exp_with_dl = Expense.objects.filter(user=request.user.id, deadline__isnull=False).order_by('deadline')
-            exp_without_dl = Expense.objects.filter(user=request.user.id, deadline__isnull=True).order_by('exp_create')
+            exp_without_dl = Expense.objects.filter(user=request.user.id, deadline__isnull=True).order_by('create')
             categories = Category.objects.filter(user=request.user.id).order_by('name')
             notes = Note.objects.filter(user=request.user.id)
             ctx_main['exp_with_dl'] = exp_with_dl
@@ -24,7 +24,7 @@ class Main(View):
         if request.user.is_authenticated:
             ctx_main = {}
             exp_with_dl = Expense.objects.filter(user=request.user.id, deadline__isnull=False).order_by('deadline')
-            exp_without_dl = Expense.objects.filter(user=request.user.id, deadline__isnull=True).order_by('exp_create')
+            exp_without_dl = Expense.objects.filter(user=request.user.id, deadline__isnull=True).order_by('create')
             categories = Category.objects.filter(user=request.user.id).order_by('name')
             notes = Note.objects.filter(user=request.user.id)
             ctx_main['exp_with_dl'] = exp_with_dl
@@ -44,6 +44,7 @@ class Main(View):
                     if Category.objects.filter(name=cat_name).count() >= 1:
                         cat_exists = f"Kategoria {cat_name} już istnieje. Podaj inną kategorię. "
                         ctx_main['cat_exists'] = cat_exists
+                        return render(request, 'main.html', context=ctx_main)
                 except:
                     pass
                 if len(cat_empty) > 0:
@@ -81,40 +82,79 @@ class Main(View):
                 expense_name = request.POST.get('exp_name')
                 expense_value = request.POST.get('exp_value')
                 expense_category = request.POST.get('category')
-                if expense_name == "" or expense_value == "" or expense_category == "":
-                    expense_info = "Nie wszystkie wymagane pola zostały uzupełnione."
-                    ctx_main['expense_info'] = expense_info
-                    return render(request, 'main.html', context=ctx_main)
-                expense_deadline = request.POST.get('exp_deadline')
-                expense_continuity = request.POST.get('continuity')
-                expense_create = date.today()
                 ctx_main['expense_name'] = expense_name
                 ctx_main['expense_value'] = expense_value
+                ctx_main['expense_category'] = expense_category
+                exp_empty = []
+                if expense_name == "":
+                    exp_empty.append(expense_name)
+                if expense_value == "":
+                    exp_empty.append(expense_value)
+                if len(exp_empty) > 0:
+                    expense_info = "Pole nie może pozostać puste."
+                    ctx_main['expense_info'] = expense_info
+                    return render(request, 'main.html', context=ctx_main)
+                # if isinstance(expense_value, (int, float)) is not True:
+                #     expense_info = "Kwota płatności musi być liczbą całkowitą lub dziesiętną."
+                #     ctx_main['expense_info'] = expense_info
+                #     return render(request, 'main.html', context=ctx_main)
+                expense_deadline = request.POST.get('exp_deadline')
                 ctx_main['expense_deadline'] = expense_deadline
-                if expense_continuity == 'yes':
+                expense_continuity = request.POST.get('continuity')
+                if expense_continuity == True and expense_deadline != "":
                     expense_days = request.POST.get('days_amount')
                     expense_weeks = request.POST.get('weeks_amount')
                     expense_months = request.POST.get('months_amount')
                     expense_amount = request.POST.get('continuity_amount')
-                    if expense_days != "" and expense_weeks == "" and expense_months == "":
+                    ctx_main['expense_days'] = expense_days
+                    ctx_main['expense_weeks'] = expense_weeks
+                    ctx_main['expense_months'] = expense_months
+                    ctx_main['expense_amount'] = expense_amount
+                    if expense_days != "" and isinstance(expense_days, int) is True and expense_weeks == "" and expense_months == "":
                         next_expense = expense_deadline + relativedelta(days=+expense_days)
                         period = f'{expense_days}_days'
-                    elif expense_weeks != "" and expense_days == "" and expense_months == "":
+                    elif expense_weeks != "" and isinstance(expense_weeks, int) is True and expense_days == "" and expense_months == "":
                         next_expense = expense_deadline + relativedelta(weeks=+expense_weeks)
                         period = f'{expense_weeks}_weeks'
-                    elif expense_months != "" and expense_days == "" and expense_weeks == "":
+                    elif expense_months != "" and isinstance(expense_months, int) is True and expense_days == "" and expense_weeks == "":
                         next_expense = expense_deadline + relativedelta(months=+expense_months)
                         period = f'{expense_months}_months'
+                    elif expense_months == "" and expense_days == "" and expense_weeks == "":
+                        expense_info = "Musisz wybrać okres częstotliwości występowania płatności."
+                        ctx_main['expense_info'] = expense_info
+                        return render(request, 'main.html', context=ctx_main)
                     else:
-                        expense_info = "Tylko jedno pole częstotliwości płatności może zostać uzupełnione. Reszta musi pozostać pusta."
+                        expense_info = "Wypełniono więcej niż jedno pole dotyczące częstotliwości płatności lub wpisana wartość nie jest liczbą całkowitą."
                         ctx_main['expense_info'] = expense_info
                         return render(request, 'main.html', context=ctx_main)
                     if expense_amount == 'continuity_amount_period':
                         exp_amount = 1000
                     else:
                         exp_amount = request.POST.get('continuity_number')
-
-
+                        if exp_amount == "" or isinstance(exp_amount, int) is not True:
+                            expense_info = "Wartość ilości cykli płatności jest nieprawidlowa lub pusta."
+                            ctx_main['expense_info'] = expense_info
+                            return render(request, 'main.html', context=ctx_main)
+                elif expense_continuity == True and expense_deadline == "":
+                    expense_info = "Przy płatnościach cyklicznych należy podać termin płatności"
+                    ctx_main['expense_info'] = expense_info
+                    return render(request, 'main.html', context=ctx_main)
+                expense_ispaid = request.POST.get('is_paid')
+                expense = Expense()
+                expense.name = expense_name
+                expense.value = expense_value
+                expense.create = date.today()
+                #expense.deadline = expense_deadline
+                if expense_continuity == True:
+                    expense.deadline = expense_deadline
+                    expense.continuity = expense_continuity
+                    expense.exp_amount = exp_amount
+                    expense.period_delta = period
+                    expense.next_exp = next_expense
+                expense.is_paid = expense_ispaid
+                expense.user = request.user
+                expense.category = Category.objects.get(name=expense_category)
+                expense.save()
             return render(request, "main.html", context=ctx_main)
 
 
