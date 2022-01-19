@@ -274,7 +274,30 @@ class Details(View):
         if 'paid' in request.POST:
             expense = Expense.objects.get(id=expid)
             expense.is_paid = True
+            expense.exp_amount -= 1
             expense.save()
+            if expense.continuity == True and expense.exp_amount > 0:
+                next_exp = Expense()
+                next_exp.name = expense.name
+                next_exp.value = expense.value
+                next_exp.create = date.today()
+                next_exp.deadline = expense.next_exp
+                next_exp.continuity = expense.continuity
+                next_exp.exp_amount = expense.exp_amount
+                next_exp.period_delta = expense.period_delta
+                number1 = expense.period_delta.find('_')
+                number2 = int(expense.period_delta[:number1])
+                period = expense.period_delta[-(len(expense.period_delta)-number1-1):]
+                if period == 'days':
+                    next_exp.next_exp = expense.next_exp + relativedelta(days=number2)
+                elif period == 'weeks':
+                    next_exp.next_exp = expense.next_exp + relativedelta(weeks=number2)
+                elif period == 'months':
+                    next_exp.next_exp = expense.next_exp + relativedelta(months=number2)
+                next_exp.is_paid = False
+                next_exp.user = request.user
+                next_exp.category = expense.category
+                next_exp.save()
             return redirect('main')
         if 'delete' in request.POST:
             expense = Expense.objects.get(id=expid)

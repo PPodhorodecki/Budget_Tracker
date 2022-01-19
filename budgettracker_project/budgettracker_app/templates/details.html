@@ -31,7 +31,23 @@
             </fieldset>
             <fieldset>
                 <legend><b>Szczegóły wydatku {{ expense.name }}</b></legend>
-
+                    <p><b>Kategoria: {{ expense.category.name }}</b></p>
+                    <p><b>Kwota: {{ expense.value }}</b></p>
+                    {% if expense.deadline == Null %}
+                        <p><b>Termin płatności: brak terminu</b></p>
+                    {% else %}
+                        <p><b>Termin płatności: {{ expense.deadline|date:"d-m" }}</b></p>
+                    {% endif %}
+                    {% if expense.continuity == False %}
+                        <p><b>Cykliczność: nie</b></p>
+                    {% else %}
+                        <p><b>Cykliczność: tak</b></p>
+                        {% if expense.exp_amount == 1000 %}
+                            <p><b>Ilość płatności do końca: cyklicznie, bez ilości płatności</b></p>
+                        {% else %}
+                            <p><b>Ilość płatności do końca: {{ expense.exp_amount }}</b></p>
+                        {% endif %}
+                    {% endif %}
             </fieldset>
             <fieldset>
                 <legend><b>Zmiana kategorii</b></legend>
