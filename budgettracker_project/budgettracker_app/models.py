@@ -20,6 +20,7 @@ class Expense(models.Model):
     next_exp = models.DateField(null=True)
     is_paid = models.BooleanField(default=False)
     paid_date = models.DateField(null=True)
+    new_note = models.TextField(null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 

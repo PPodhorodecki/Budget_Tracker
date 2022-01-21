@@ -333,9 +333,11 @@ class Details(View):
         if 'add_note' in request.POST:
             note_text = request.POST.get('note')
             expense = Expense.objects.get(id=expid)
+            expense.new_note = note_text
+            expense.save()
             note = Note()
             note.text = note_text
-            note.mod_date = datetime.datetime.now()
+            note.mod_date = datetime.now()
             note.user = request.user
             note.expense = expense
             note.save()

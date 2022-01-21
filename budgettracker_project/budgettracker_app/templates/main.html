@@ -52,7 +52,11 @@
                         {% elif exp_dl.is_paid == True %}
                             <td>Opłacone</td>
                         {% endif %}
-                        <td>-</td>
+                        {% if exp_dl.new_note == None %}
+                            <td>-</td>
+                        {% else %}
+                            <td>{{ exp_dl.new_note }}</td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
                 {% for exp in exp_without_dl %}
@@ -66,7 +70,11 @@
                         {% elif exp.is_paid == True %}
                             <td>Opłacone</td>
                         {% endif %}
-                        <td>-</td>
+                        {% if exp.new_note == None %}
+                            <td>-</td>
+                        {% else %}
+                            <td>{{ exp.new_note }}</td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
             </tbody>
