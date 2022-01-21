@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Archiwum
+{% endblock %}
+
+{% block content1 %}
+    {% if request.user.is_authenticated == True %}
+        <button type="button" class="button4" onclick="window.location.href='/';">Strona główna</button>
+    {% endif %}
+{% endblock %}
+
+{% block content2 %}
+    {% if request.user.is_authenticated == True %}
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="4">Archiwum dokonanych płatności:</th>
+                </tr>
+                <tr>
+                    <th width="40%">Nazwa</th>
+                    <th width="15%">Koszt</th>
+                    <th width="25%">Kategoria</th>
+                    <th width="20%">Data płatności</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for arch in archive %}
+                    <tr>
+                        <td>{{ arch.name }}</td>
+                        <td>{{ arch.value }}</td>
+                        <td>{{ arch.category }}</td>
+                        <td>{{ arch.paid|date:"d-m-Y" }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+    {% endif %}
+{% endblock %}

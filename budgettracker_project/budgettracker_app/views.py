@@ -2,7 +2,7 @@ from datetime import date, timedelta, datetime
 from dateutil.relativedelta import relativedelta
 from django.shortcuts import render, redirect
 from django.views import View
-from budgettracker_app.models import User, Expense, Category, Note
+from budgettracker_app.models import User, Expense, Category, Note, Archive
 from django.contrib.auth import authenticate, login, logout
 
 
@@ -95,10 +95,6 @@ class Main(View):
                     ctx_main['exp_empty_field'] = exp_empty_field
                     ctx_main['exp_empty'] = exp_empty
                     return render(request, 'main.html', context=ctx_main)
-                # if isinstance(expense_value, (int, float)) is not True:
-                #     expense_info = "Kwota płatności musi być liczbą całkowitą lub dziesiętną."
-                #     ctx_main['expense_info'] = expense_info
-                #     return render(request, 'main.html', context=ctx_main)
                 expense_deadline = request.POST.get('exp_deadline')
                 ctx_main['expense_deadline'] = expense_deadline
                 expense_continuity = request.POST.get('continuity')
@@ -274,7 +270,9 @@ class Details(View):
         if 'paid' in request.POST:
             expense = Expense.objects.get(id=expid)
             expense.is_paid = True
-            expense.exp_amount -= 1
+            expense.paid_date = datetime.today()
+            if expense.continuity == True:
+                expense.exp_amount -= 1
             expense.save()
             if expense.continuity == True and expense.exp_amount > 0:
                 next_exp = Expense()
@@ -298,6 +296,18 @@ class Details(View):
                 next_exp.user = request.user
                 next_exp.category = expense.category
                 next_exp.save()
+            return redirect('main')
+        if 'archive' in request.POST:
+            user = request.user
+            expense = Expense.objects.get(id=expid)
+            archive = Archive()
+            archive.name = expense.name
+            archive.value = expense.value
+            archive.category = expense.category.name
+            archive.paid = expense.paid_date
+            archive.user = user
+            archive.save()
+            expense.delete()
             return redirect('main')
         if 'delete' in request.POST:
             expense = Expense.objects.get(id=expid)
@@ -365,3 +375,10 @@ class Account(View):
             user.delete()
             user_success = 'Konto zostało pomyślnie usunięte.'
             return render(request, 'main.html', context={'user_success': user_success})
+
+
+class Arch(View):
+    def get(self, request):
+        user = request.user
+        archive = Archive.objects.filter(user=user).order_by('paid')
+        return render(request, 'archive.html', context={'user': user, 'archive': archive})

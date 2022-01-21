@@ -19,6 +19,7 @@ class Expense(models.Model):
     period_delta = models.CharField(max_length=64)
     next_exp = models.DateField(null=True)
     is_paid = models.BooleanField(default=False)
+    paid_date = models.DateField(null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
@@ -30,9 +31,9 @@ class Note(models.Model):
     expense = models.ForeignKey(Expense, on_delete=models.CASCADE)
 
 
-# class Archive(models.Model):
-#     name = models.CharField(max_length=32)
-#     value = models.DecimalField(max_digits=9, decimal_places=2)
-#     paid_date = models.DateField()
-#     #expense = models.ForeignKey(Expense, on_delete=models.CASCADE)
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+class Archive(models.Model):
+    name = models.CharField(max_length=32)
+    value = models.DecimalField(max_digits=9, decimal_places=2)
+    paid = models.DateField()
+    category = models.CharField(max_length=32)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
