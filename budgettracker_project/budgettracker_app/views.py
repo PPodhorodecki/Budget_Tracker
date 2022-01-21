@@ -31,6 +31,18 @@ class Main(View):
             ctx_main['exp_without_dl'] = exp_without_dl
             ctx_main['categories'] = categories
             ctx_main['notes'] = notes
+            if 'all_archive' in request.POST:
+                user = request.user
+                expenses = Expense.objects.filter(user=user, is_paid=True).order_by('paid_date')
+                for expense in expenses:
+                    archive = Archive()
+                    archive.name = expense.name
+                    archive.value = expense.value
+                    archive.category = expense.category.name
+                    archive.paid = expense.paid_date
+                    archive.user = user
+                    archive.save()
+                    expense.delete()
             if 'new_category' in request.POST:
                 cat_name = request.POST.get('cat_name')
                 cat_description = request.POST.get('cat_description')

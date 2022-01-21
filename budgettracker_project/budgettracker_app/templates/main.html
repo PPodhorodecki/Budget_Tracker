@@ -21,6 +21,11 @@
 
 {% block content2 %}
     {% if request.user.is_authenticated == True %}
+        <form method="post" action="">
+            {% csrf_token %}
+            <input type="submit" name="all_archive" value="Archiwizuj opł." class="button4">
+        </form>
+        <p></p>
         <table>
             <thead>
                 <tr>
