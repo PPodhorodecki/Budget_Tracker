@@ -158,14 +158,17 @@ class Main(View):
                 expense.name = expense_name
                 expense.value = expense_value
                 expense.create = date.today()
-                #expense.deadline = expense_deadline
-                if expense_continuity == 'true':
+                if expense_deadline != "":
                     expense.deadline = expense_deadline
+                if expense_continuity == 'true':
+                    #expense.deadline = expense_deadline
                     expense.continuity = exp_continuity
                     expense.exp_amount = exp_amount
                     expense.period_delta = period
                     expense.next_exp = next_expense
                 expense.is_paid = ispaid
+                if expense.is_paid == True:
+                    expense.paid_date = date.today()
                 expense.user = request.user
                 expense.category = Category.objects.get(name=expense_category)
                 expense.save()
@@ -394,5 +397,5 @@ class Account(View):
 class Arch(View):
     def get(self, request):
         user = request.user
-        archive = Archive.objects.filter(user=user).order_by('paid')
+        archive = Archive.objects.filter(user=user).order_by('-paid')
         return render(request, 'archive.html', context={'user': user, 'archive': archive})
