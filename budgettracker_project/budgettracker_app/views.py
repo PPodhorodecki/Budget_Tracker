@@ -53,7 +53,7 @@ class Main(View):
                 if cat_description == "":
                     cat_empty.append('category_description')
                 try:
-                    if Category.objects.filter(name=cat_name).count() >= 1:
+                    if Category.objects.filter(user=request.user, name=cat_name).count() >= 1:
                         cat_exists = f"Kategoria {cat_name} już istnieje. Podaj inną kategorię. "
                         ctx_main['cat_exists'] = cat_exists
                         return render(request, 'main.html', context=ctx_main)
@@ -170,7 +170,7 @@ class Main(View):
                 if expense.is_paid == True:
                     expense.paid_date = date.today()
                 expense.user = request.user
-                expense.category = Category.objects.get(name=expense_category)
+                expense.category = Category.objects.get(user=request.user, name=expense_category) #Po id a nie name
                 expense.save()
                 ctx_main['expense_name'] = ""
                 ctx_main['expense_value'] = ""
